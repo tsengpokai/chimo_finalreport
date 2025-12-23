@@ -23,8 +23,8 @@ const courseData = {
         content: [
             { type: "text", heading: "臨界折射波 (Critical Refraction)", body: "當震波從低速層進入高速層，且入射角達到臨界角時，波會沿著交界面滑行並折射回地表。" },
             // 修正：將兩張圖拆開，src 放路徑，caption 放說明
-            { type: "image", src: "img/041.png", caption: "示意圖：臨界折射波路徑" },
-            { type: "image", src: "img/042.png", caption: "示意圖：波前傳播機制" },
+            { type: "image", src: "images/041.png", caption: "示意圖：臨界折射波路徑" },
+            { type: "image", src: "images/042.png", caption: "示意圖：波前傳播機制" },
             { type: "math", heading: "走時公式推導", body: "$$ T = \\frac{x}{V_2} + \\frac{2h \\cos \\theta_c}{V_1} $$" },
             { type: "math", heading: "Crossover Distance", body: "$$ X_{cr} = 2h \\sqrt{\\frac{V_2 + V_1}{V_2 - V_1}} $$" }
         ]
@@ -38,14 +38,14 @@ const courseData = {
         content: [
             { type: "text", heading: "1. 實驗器材與方法", body: "使用 NZ 24 Strata View 紀錄儀與 24 道檢波器 (Geophones)。每隔 2 公尺設置一個接收點，並使用大錘敲擊金屬板作為震源。除了器材架設，我們也學習了如何檢查線路雜訊 (Noise Test)。" },
             // 修正路徑
-            { type: "image", src: "img/032.png", caption: "實驗器材與佈線現場" },
+            { type: "image", src: "images/032.png", caption: "實驗器材與佈線現場" },
             { type: "text", heading: "2. 實驗過程", body: "團隊分工合作，依序進行正打（由北向南）與逆打。紀錄過程中，必須確保大錘敲擊力道足夠，且周圍無人走動干擾訊號。我們共採集了多組震測紀錄，並即時檢查初達波是否清晰。" },
             // 修正路徑
-            { type: "image", src: "img/033.png", caption: "實驗過程：大錘敲擊與團隊紀錄" },
+            { type: "image", src: "images/033.png", caption: "實驗過程：大錘敲擊與團隊紀錄" },
             { type: "text", heading: "3. 結果與結論", body: "透過分析走時曲線圖，我們計算出校園地下的分層速度構造。藍線斜率代表表土層速度 V1，紅線斜率代表基盤速度 V2。利用截距時間法，成功推算出基盤深度約在地下 5-8 公尺處，顯示該區域地質結構相對平緩。" },
             // 修正：將兩張圖拆開
-            { type: "image", src: "img/031.png", caption: "實驗結果：走時曲線分析圖 (1)" },
-            { type: "image", src: "img/034.png", caption: "實驗結果：數據統整 (2)" }
+            { type: "image", src: "images/031.png", caption: "實驗結果：走時曲線分析圖 (1)" },
+            { type: "image", src: "images/034.png", caption: "實驗結果：數據統整 (2)" }
         ]
     },
     "week4": {
@@ -68,7 +68,7 @@ const courseData = {
         content: [
             { type: "text", heading: "什麼是走時層析成像？", body: "走時層析成像 (Travel Time Tomography) 是一種利用地震波由震源傳遞至測站的「走時殘差 (Travel-time Residual)」來反推地下速度構造的技術。<br><br>原理基於：<strong>$T_{obs} = T_{cal} + \\Delta T$</strong><br>如果觀測時間比理論時間短，代表波經過了高速區；反之則經過低速區。透過建立方程組 $d = Gm$ (d:資料, G:路徑矩陣, m:模型參數)，我們可以解出地下的速度擾動分佈。" },
             // 修正路徑
-            { type: "image", src: "img/051.png", caption: "示意圖：地震射線穿過網格化的地球模型" }
+            { type: "image", src: "images/051.png", caption: "示意圖：地震射線穿過網格化的地球模型" }
         ]
     },
     "week6": {
@@ -95,7 +95,7 @@ const courseData = {
             { type: "text", heading: "如何創造工作流？(實作步驟)", body: "1. <strong>定義目標：</strong>我希望自動整理地球物理文獻並存檔。<br>2. <strong>設計 Prompt：</strong>設定 AI 角色為「科研助理」，並規定輸出格式 (JSON)。<br>3. <strong>串接 API：</strong>在 Dify 中設定 Google Gemini API Key。<br>4. <strong>連結 Notion：</strong>透過 webhook 將 AI 生成的摘要自動寫入 Notion Database。" },
             // 修正：這張圖看起來您想用本地圖片 img/061.png 或是保留 Notion 連結？
             // 如果要用本地圖片，請改用下面這行：
-             { type: "image", src: "img/061.png", caption: "AI Agent 工作流架構圖" },
+             { type: "image", src: "images/061.png", caption: "AI Agent 工作流架構圖" },
             // 如果要維持 Notion 連結：
             { type: "image", src: "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fhw-2a9a2e8d13c680e2a0eced173b528cc4.png?table=block&id=2a9a2e8d-13c6-80e2-a0ec-ed173b528cc4", caption: "AI Agent 工作流架構圖" },
             { type: "link_group", links: [{text: "GitHub Repo", url: "https://github.com/tsengpokai/Homework7_U11310015"}, {text: "Notion Page", url: "https://www.notion.so/hw-2a9a2e8d13c680e2a0eced173b528cc4"}] }
