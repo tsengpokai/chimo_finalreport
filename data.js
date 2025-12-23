@@ -1,6 +1,6 @@
 // data.js
 const courseData = {
-    // ... Week 1-6 保持不變 ...
+    // ... Week 1 保持不變 ...
     "week1": {
         title: "Week 1: 地球物理與 AI 工具建置",
         date: "2025/09/10",
@@ -22,7 +22,9 @@ const courseData = {
         description: "推導臨界折射波走時公式與 Crossover Distance，並探討其在工程上的應用。",
         content: [
             { type: "text", heading: "臨界折射波 (Critical Refraction)", body: "當震波從低速層進入高速層，且入射角達到臨界角時，波會沿著交界面滑行並折射回地表。" },
-            { type: "image", src: "week2_diagram.jpg", caption: "img/041.png", "img/042.png" },
+            // 修正：將兩張圖拆開，src 放路徑，caption 放說明
+            { type: "image", src: "img/041.png", caption: "示意圖：臨界折射波路徑" },
+            { type: "image", src: "img/042.png", caption: "示意圖：波前傳播機制" },
             { type: "math", heading: "走時公式推導", body: "$$ T = \\frac{x}{V_2} + \\frac{2h \\cos \\theta_c}{V_1} $$" },
             { type: "math", heading: "Crossover Distance", body: "$$ X_{cr} = 2h \\sqrt{\\frac{V_2 + V_1}{V_2 - V_1}} $$" }
         ]
@@ -35,11 +37,15 @@ const courseData = {
         description: "於校園進行實地佈線與敲擊，並撰寫完整的實驗報告。",
         content: [
             { type: "text", heading: "1. 實驗器材與方法", body: "使用 NZ 24 Strata View 紀錄儀與 24 道檢波器 (Geophones)。每隔 2 公尺設置一個接收點，並使用大錘敲擊金屬板作為震源。除了器材架設，我們也學習了如何檢查線路雜訊 (Noise Test)。" },
-            { type: "image", src: "week3_equipment.jpg", caption: "img/032.png" },
+            // 修正路徑
+            { type: "image", src: "img/032.png", caption: "實驗器材與佈線現場" },
             { type: "text", heading: "2. 實驗過程", body: "團隊分工合作，依序進行正打（由北向南）與逆打。紀錄過程中，必須確保大錘敲擊力道足夠，且周圍無人走動干擾訊號。我們共採集了多組震測紀錄，並即時檢查初達波是否清晰。" },
-            { type: "image", src: "week3_process.jpg", caption: "img/033.png" },
+            // 修正路徑
+            { type: "image", src: "img/033.png", caption: "實驗過程：大錘敲擊與團隊紀錄" },
             { type: "text", heading: "3. 結果與結論", body: "透過分析走時曲線圖，我們計算出校園地下的分層速度構造。藍線斜率代表表土層速度 V1，紅線斜率代表基盤速度 V2。利用截距時間法，成功推算出基盤深度約在地下 5-8 公尺處，顯示該區域地質結構相對平緩。" },
-            { type: "image", src: "week3_result.jpg", caption: "img/031.png", "img/034.png" }
+            // 修正：將兩張圖拆開
+            { type: "image", src: "img/031.png", caption: "實驗結果：走時曲線分析圖 (1)" },
+            { type: "image", src: "img/034.png", caption: "實驗結果：數據統整 (2)" }
         ]
     },
     "week4": {
@@ -61,7 +67,8 @@ const courseData = {
         description: "深入解析走時層析成像技術 (Travel Time Tomography) 原理。",
         content: [
             { type: "text", heading: "什麼是走時層析成像？", body: "走時層析成像 (Travel Time Tomography) 是一種利用地震波由震源傳遞至測站的「走時殘差 (Travel-time Residual)」來反推地下速度構造的技術。<br><br>原理基於：<strong>$T_{obs} = T_{cal} + \\Delta T$</strong><br>如果觀測時間比理論時間短，代表波經過了高速區；反之則經過低速區。透過建立方程組 $d = Gm$ (d:資料, G:路徑矩陣, m:模型參數)，我們可以解出地下的速度擾動分佈。" },
-            { type: "image", src: "week5_tomography.jpg", caption: "img/051.png" }
+            // 修正路徑
+            { type: "image", src: "img/051.png", caption: "示意圖：地震射線穿過網格化的地球模型" }
         ]
     },
     "week6": {
@@ -86,14 +93,17 @@ const courseData = {
         content: [
             { type: "text", heading: "什麼是 AI Agent 工作流？", body: "AI Agent (人工智慧代理) 不同於單純的問答機器人，它具備<strong>感知、思考、行動</strong>的能力。一個完整的工作流包含：<br>1. <strong>大腦 (LLM)：</strong>負責理解意圖與邏輯判斷 (如 Gemini)。<br>2. <strong>工具 (Tools)：</strong>執行具體任務 (如搜尋文獻、寫入資料庫)。<br>3. <strong>記憶 (Memory)：</strong>記住上下文以進行多輪對話。<br>本週我透過 Dify 平台將這些模組串聯，實現自動化科研。" },
             { type: "text", heading: "如何創造工作流？(實作步驟)", body: "1. <strong>定義目標：</strong>我希望自動整理地球物理文獻並存檔。<br>2. <strong>設計 Prompt：</strong>設定 AI 角色為「科研助理」，並規定輸出格式 (JSON)。<br>3. <strong>串接 API：</strong>在 Dify 中設定 Google Gemini API Key。<br>4. <strong>連結 Notion：</strong>透過 webhook 將 AI 生成的摘要自動寫入 Notion Database。" },
-            { type: "image", src: "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fhw-2a9a2e8d13c680e2a0eced173b528cc4.png?table=block&id=2a9a2e8d-13c6-80e2-a0ec-ed173b528cc4", caption: "img/061.png" },
+            // 修正：這張圖看起來您想用本地圖片 img/061.png 或是保留 Notion 連結？
+            // 如果要用本地圖片，請改用下面這行：
+            // { type: "image", src: "img/061.png", caption: "AI Agent 工作流架構圖" },
+            // 如果要維持 Notion 連結：
+            { type: "image", src: "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fhw-2a9a2e8d13c680e2a0eced173b528cc4.png?table=block&id=2a9a2e8d-13c6-80e2-a0ec-ed173b528cc4", caption: "AI Agent 工作流架構圖" },
             { type: "link_group", links: [{text: "GitHub Repo", url: "https://github.com/tsengpokai/Homework7_U11310015"}, {text: "Notion Page", url: "https://www.notion.so/hw-2a9a2e8d13c680e2a0eced173b528cc4"}] }
         ]
     },
     
+    // ... 後面 Week 8 - Week 16 維持不變，請直接複製原本的 ...
     "week8": { title: "Week 8: 期中考", date: "2025/10/29", tags: ["Exam"], icon: "fa-pen-alt", description: "期中知識檢核。", content: [{ type: "text", heading: "期中總結", body: "複習震測公式、重力異常與地球物理基礎。" }] },
-
-    // --- Week 9: 南美洲板塊詳細分析 (恢復詳細版) ---
     "week9": {
         title: "Week 9: 南美洲板塊構造分析",
         date: "2025/11/05",
@@ -109,10 +119,7 @@ const courseData = {
             { type: "link_group", links: [{text: "Google Colab 程式碼", url: "https://colab.research.google.com/github/tsengpokai/-10--/blob/main/PyGMT.ipynb"}] }
         ]
     },
-
     "week10": { title: "Week 10: PyGMT 教學網站", date: "2025/11/12", tags: ["Web Dev"], icon: "fa-laptop-code", description: "製作 PyGMT 入門教學網頁。", content: [{ type: "iframe", src: "https://tsengpokai.github.io/intro-learnPYGMT/", caption: "GitHub Pages 成果" }] },
-    
-    // --- Week 11-13: 綜合探勘與三個遊戲 ---
     "week11_13": {
         title: "Week 11-13: 板塊構造與地熱綜合探勘",
         date: "2025/11/19 - 12/03",
@@ -122,16 +129,12 @@ const courseData = {
         content: [
             { type: "text", heading: "1. 古地磁與海底擴張 (Week 11)", body: "<strong>岩石的秘密羅盤：</strong>當岩漿冷卻低於居禮溫度時，磁性礦物會紀錄當下的地磁方向。透過分析洋脊兩側的磁條帶對稱性，我們證實了海底正在擴張，且地磁極會發生倒轉。" },
             { type: "game_magnetic", heading: "Game I：海底擴張磁條帶模擬器", caption: "拖動滑桿，觀察隨著時間推移，洋脊如何製造新地殼並紀錄地磁倒轉。" },
-            
             { type: "text", heading: "2. 地球熱分佈與地熱技術 (Week 12-13)", body: "地熱探勘仰賴多種地球物理方法。<strong>大地電磁法 (MT)</strong> 利用地下電阻率差異尋找黏土蓋層；<strong>熱流模擬</strong>則幫助我們推估深部溫度。此外，<strong>微震監測</strong>對於地熱注水過程中的安全性至關重要。" },
             { type: "game_heat", heading: "Game II：地殼熱流模擬器", caption: "調整導熱參數與地溫梯度，模擬鑽井深度與溫度變化。(還原經典版)" },
-            
             { type: "text", heading: "3. 微震監測 (Microseismic Monitoring)", body: "在地熱開發(EGS)中，我們需要將水注入地底以撐開裂隙。這時需即時監控誘發的微小地震，以追蹤流體路徑並防止災害。" },
             { type: "game_microseismic", heading: "Game III：微震監測儀表板 (New)", caption: "調整「注水壓力」，觀察誘發微震的分佈與破裂範圍。" }
         ]
     },
-    // ----------------
-    
     "week14": {
         title: "Week 14: 黃有志博士專題演講",
         date: "2025/12/10",
