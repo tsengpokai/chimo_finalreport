@@ -38,7 +38,6 @@
 
     <main class="flex-1 content-area p-8 relative">
         
-        <!-- Week 1 -->
         <section id="week1" class="mb-16">
             <h2 class="text-4xl font-bold mb-6 text-blue-400 border-b border-gray-700 pb-4">Week 1: Hugging Face 應用部署</h2>
             <div class="card">
@@ -59,7 +58,6 @@
             </div>
         </section>
 
-        <!-- Week 2 -->
         <section id="week2" class="mb-16">
             <h2 class="text-4xl font-bold mb-6 text-blue-400 border-b border-gray-700 pb-4">Week 2: 震測理論與推導</h2>
             <div class="card">
@@ -93,28 +91,27 @@
             </div>
         </section>
 
-        <!-- Week 3 -->
         <section id="week3" class="mb-16">
-            <h2 class="text-4xl font-bold mb-6 text-green-400 border-b border-gray-700 pb-4">Week 3: 校園折射震測實驗</h2>
+            <h2 class="text-4xl font-bold mb-6 text-emerald-400 border-b border-gray-700 pb-4">Week 3: 校園野外震測實驗</h2>
             <div class="card">
                 <div class="flex justify-between items-start">
                     <div>
                         <h3 class="text-2xl font-bold mb-2">折射震測實驗報告</h3>
                         <p class="text-gray-400 text-sm"><i class="far fa-calendar-alt"></i> 日期：114年9月24日 | 地點：圖書館後方 | 天氣：晴</p>
                     </div>
-                    <span class="bg-green-900 text-green-300 px-3 py-1 rounded-full text-sm">Field Trip</span>
+                    <span class="bg-emerald-900 text-emerald-300 px-3 py-1 rounded-full text-sm">Field Trip</span>
                 </div>
 
                 <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
-                        <h4 class="font-bold text-lg mb-2 border-l-4 border-green-500 pl-2">實驗目的</h4>
+                        <h4 class="font-bold text-lg mb-2 border-l-4 border-emerald-500 pl-2">實驗目的</h4>
                         <ul class="list-disc list-inside text-gray-300 space-y-1 mb-4">
                             <li>找到分層震波速度 (V1, V2)。</li>
                             <li>確定地層分界深度 (Depth)。</li>
                             <li>評估地層強度與密實度。</li>
                         </ul>
 
-                        <h4 class="font-bold text-lg mb-2 border-l-4 border-green-500 pl-2">儀器與參數</h4>
+                        <h4 class="font-bold text-lg mb-2 border-l-4 border-emerald-500 pl-2">儀器與參數</h4>
                         <ul class="list-disc list-inside text-gray-300 space-y-1 mb-4">
                             <li><strong>震源：</strong> 大錘敲擊金屬板 (Sledgehammer)</li>
                             <li><strong>紀錄儀器：</strong> DAS-1 / NZ 24 Strata View</li>
@@ -123,6 +120,7 @@
                         </ul>
                     </div>
                     <div>
+                        
                         <div class="w-full h-full bg-gray-800 flex items-center justify-center border border-dashed border-gray-600 rounded min-h-[200px]">
                             <span class="text-gray-500">請插入實驗現場照片 (敲擊或佈線)</span>
                         </div>
@@ -130,7 +128,7 @@
                 </div>
 
                 <div class="mt-6">
-                    <h4 class="font-bold text-lg mb-2 border-l-4 border-green-500 pl-2">實驗結果分析</h4>
+                    <h4 class="font-bold text-lg mb-2 border-l-4 border-emerald-500 pl-2">實驗結果分析</h4>
                     <p class="text-gray-300 mb-3">透過分析直達波與折射波的走時斜率，我們繪製了走時曲線圖 (Travel-time Curve)。</p>
                     <div class="bg-gray-800 p-4 rounded mb-4">
                         <p class="text-sm text-yellow-400 mb-2"><strong>數據判讀：</strong></p>
@@ -148,7 +146,95 @@
             </div>
         </section>
 
-        <!-- Add more weeks here... -->
+        <section id="week5" class="mb-16">
+            <h2 class="text-4xl font-bold mb-6 text-purple-400 border-b border-gray-700 pb-4">Week 5: ObsPy 地震波處理</h2>
+            <div class="card">
+                <h3 class="text-2xl font-bold mb-4">Python 抓取 IRIS 地震資料</h3>
+                <p class="mb-4">使用 ObsPy 套件連接 FDSN Client，下載並繪製 2025/10/07 的地震波形。</p>
+                
+                <div class="code-block text-sm text-green-400">
+<pre>
+from obspy import UTCDateTime
+from obspy.clients.fdsn import Client
+import matplotlib.pyplot as plt
+
+client = Client("IRIS")
+starttime = UTCDateTime("2025-10-07T23:52:12")
+duration = 120 
+endtime = starttime + duration
+
+# 下載資料
+st = client.get_waveforms("TW", "NACB", "", "BHZ", starttime, endtime)
+
+# 繪圖
+fig = plt.figure(figsize=(10, 4))
+st.plot(outfile="waveform.png", fig=fig)
+</pre>
+                </div>
+                
+                <div class="mt-4">
+                    <h4 class="font-bold mb-2">產出結果 (Waveform.png)：</h4>
+                    
+                    <div class="w-full h-48 bg-white flex items-center justify-center border border-gray-600 rounded">
+                        <span class="text-black">請插入 Python 產出的 waveform.png</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="week6" class="mb-16">
+            <h2 class="text-4xl font-bold mb-6 text-purple-400 border-b border-gray-700 pb-4">Week 6-7: 重力探勘與 AI Agent</h2>
+            <div class="card">
+                 <h3 class="text-2xl font-bold mb-4">Free Air Anomaly Gradio App</h3>
+                 <p class="mb-4">建立互動式應用程式展示自由空間異常概念。</p>
+                 <iframe src="https://huggingface.co/spaces/tspokai/HW8" height="400" width="100%"></iframe>
+            </div>
+            <div class="card mt-6">
+                <h3 class="text-2xl font-bold mb-4">AI 小助手工作流 (Dify + Gemini)</h3>
+                <p>結合 Notion 與 Gemini API 打造個人化科研助理。</p>
+                <div class="flex gap-4 mt-4">
+                    <a href="https://github.com/tsengpokai/Homework7_U11310015" target="_blank" class="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600">Github Repo</a>
+                    <a href="https://www.notion.so/hw-2a9a2e8d13c680e2a0eced173b528cc4" target="_blank" class="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600">Notion Page</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="week9" class="mb-16">
+            <h2 class="text-4xl font-bold mb-6 text-yellow-400 border-b border-gray-700 pb-4">Week 9-12: 板塊構造與 PyGMT</h2>
+            <div class="card">
+                <h3 class="text-2xl font-bold mb-4">PyGMT 教學網站與板塊繪圖</h3>
+                <p class="mb-4">針對南美洲板塊與周邊（納茲卡、非洲、加勒比海）的板塊邊界進行詳細繪圖分析。</p>
+                <div class="bg-black rounded-lg overflow-hidden h-96 border border-gray-700">
+                     <iframe src="https://tsengpokai.github.io/intro-learnPYGMT/" height="100%" width="100%"></iframe>
+                </div>
+                <div class="mt-4 grid grid-cols-2 gap-4">
+                    <div class="bg-gray-800 p-3 rounded">
+                        <h5 class="font-bold text-yellow-400">聚合型邊界</h5>
+                        <p class="text-sm">納茲卡板塊隱沒至南美洲下，形成安地斯山脈。</p>
+                    </div>
+                    <div class="bg-gray-800 p-3 rounded">
+                        <h5 class="font-bold text-yellow-400">張裂型邊界</h5>
+                        <p class="text-sm">大西洋中洋脊，推動南美洲向西移動。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+         <section id="week13" class="mb-32">
+            <h2 class="text-4xl font-bold mb-6 text-red-400 border-b border-gray-700 pb-4">Week 13-16: 進階應用與期末發表</h2>
+            <div class="card">
+                <h3 class="text-2xl font-bold mb-4">AI 地震學：自動化監測平台</h3>
+                <p class="mb-4">整合 Gemini API、Obspy 與 Plotly 建立的綜合分析平台。支援波形自動下載、濾波處理與震相判讀。</p>
+                <iframe src="https://huggingface.co/spaces/cwadayi/Eq_demo" height="500" width="100%"></iframe>
+            </div>
+             <div class="card">
+                <h3 class="text-2xl font-bold mb-4">專題演講心得與期末網站</h3>
+                <ul class="space-y-2">
+                    <li><a href="https://tsengpokai.github.io/WuYuLiao/" target="_blank" class="text-blue-400 hover:underline">廖勿渝博士演講心得網站 (AI遇上地震學)</a></li>
+                    <li><span class="text-gray-400">黃有志博士演講心得 (PDF 存檔)</span></li>
+                </ul>
+            </div>
+        </section>
 
     </main>
 
