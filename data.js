@@ -125,7 +125,7 @@ const courseData = {
             },
             {
                 type: "iframe",
-                src: "https://huggingface.co/spaces/tspokai/HW8",
+                src: "https://tspokai-hw8.hf.space",
                 caption: "Gradio 實作：Free Air Anomaly 互動展示"
             }
         ]
@@ -218,7 +218,7 @@ const courseData = {
             },
             {
                 type: "iframe",
-                src: "https://huggingface.co/spaces/cwadayi/Eq_demo",
+                src: "https://cwadayi-eq-demo.hf.space",
                 caption: "AI 地震監測平台展示"
             }
         ]
