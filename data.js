@@ -22,7 +22,7 @@ const courseData = {
         description: "推導臨界折射波走時公式與 Crossover Distance，並探討其在工程上的應用。",
         content: [
             { type: "text", heading: "臨界折射波 (Critical Refraction)", body: "當震波從低速層進入高速層，且入射角達到臨界角時，波會沿著交界面滑行並折射回地表。" },
-            { type: "image", src: "week2_diagram.jpg", caption: "示意圖：臨界折射波路徑與波前 (請插入圖片)" },
+            { type: "image", src: "week2_diagram.jpg", caption: "img/041.png", "img/042.png" },
             { type: "math", heading: "走時公式推導", body: "$$ T = \\frac{x}{V_2} + \\frac{2h \\cos \\theta_c}{V_1} $$" },
             { type: "math", heading: "Crossover Distance", body: "$$ X_{cr} = 2h \\sqrt{\\frac{V_2 + V_1}{V_2 - V_1}} $$" }
         ]
@@ -35,11 +35,11 @@ const courseData = {
         description: "於校園進行實地佈線與敲擊，並撰寫完整的實驗報告。",
         content: [
             { type: "text", heading: "1. 實驗器材與方法", body: "使用 NZ 24 Strata View 紀錄儀與 24 道檢波器 (Geophones)。每隔 2 公尺設置一個接收點，並使用大錘敲擊金屬板作為震源。除了器材架設，我們也學習了如何檢查線路雜訊 (Noise Test)。" },
-            { type: "image", src: "week3_equipment.jpg", caption: "實驗器材與佈線現場 (請插入照片)" },
+            { type: "image", src: "week3_equipment.jpg", caption: "img/032.png" },
             { type: "text", heading: "2. 實驗過程", body: "團隊分工合作，依序進行正打（由北向南）與逆打。紀錄過程中，必須確保大錘敲擊力道足夠，且周圍無人走動干擾訊號。我們共採集了多組震測紀錄，並即時檢查初達波是否清晰。" },
-            { type: "image", src: "week3_process.jpg", caption: "實驗過程：大錘敲擊與團隊紀錄 (請插入照片)" },
+            { type: "image", src: "week3_process.jpg", caption: "img/033.png" },
             { type: "text", heading: "3. 結果與結論", body: "透過分析走時曲線圖，我們計算出校園地下的分層速度構造。藍線斜率代表表土層速度 V1，紅線斜率代表基盤速度 V2。利用截距時間法，成功推算出基盤深度約在地下 5-8 公尺處，顯示該區域地質結構相對平緩。" },
-            { type: "image", src: "week3_result.jpg", caption: "實驗結果：走時曲線分析圖 (請插入照片)" }
+            { type: "image", src: "week3_result.jpg", caption: "img/031.png", "img/034.png" }
         ]
     },
     "week4": {
@@ -61,7 +61,7 @@ const courseData = {
         description: "深入解析走時層析成像技術 (Travel Time Tomography) 原理。",
         content: [
             { type: "text", heading: "什麼是走時層析成像？", body: "走時層析成像 (Travel Time Tomography) 是一種利用地震波由震源傳遞至測站的「走時殘差 (Travel-time Residual)」來反推地下速度構造的技術。<br><br>原理基於：<strong>$T_{obs} = T_{cal} + \\Delta T$</strong><br>如果觀測時間比理論時間短，代表波經過了高速區；反之則經過低速區。透過建立方程組 $d = Gm$ (d:資料, G:路徑矩陣, m:模型參數)，我們可以解出地下的速度擾動分佈。" },
-            { type: "image", src: "week5_tomography.jpg", caption: "示意圖：地震射線穿過網格化的地球模型 (請插入圖片)" }
+            { type: "image", src: "week5_tomography.jpg", caption: "img/051.png" }
         ]
     },
     "week6": {
@@ -86,7 +86,7 @@ const courseData = {
         content: [
             { type: "text", heading: "什麼是 AI Agent 工作流？", body: "AI Agent (人工智慧代理) 不同於單純的問答機器人，它具備<strong>感知、思考、行動</strong>的能力。一個完整的工作流包含：<br>1. <strong>大腦 (LLM)：</strong>負責理解意圖與邏輯判斷 (如 Gemini)。<br>2. <strong>工具 (Tools)：</strong>執行具體任務 (如搜尋文獻、寫入資料庫)。<br>3. <strong>記憶 (Memory)：</strong>記住上下文以進行多輪對話。<br>本週我透過 Dify 平台將這些模組串聯，實現自動化科研。" },
             { type: "text", heading: "如何創造工作流？(實作步驟)", body: "1. <strong>定義目標：</strong>我希望自動整理地球物理文獻並存檔。<br>2. <strong>設計 Prompt：</strong>設定 AI 角色為「科研助理」，並規定輸出格式 (JSON)。<br>3. <strong>串接 API：</strong>在 Dify 中設定 Google Gemini API Key。<br>4. <strong>連結 Notion：</strong>透過 webhook 將 AI 生成的摘要自動寫入 Notion Database。" },
-            { type: "image", src: "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fhw-2a9a2e8d13c680e2a0eced173b528cc4.png?table=block&id=2a9a2e8d-13c6-80e2-a0ec-ed173b528cc4", caption: "AI Agent 工作流架構圖" },
+            { type: "image", src: "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fhw-2a9a2e8d13c680e2a0eced173b528cc4.png?table=block&id=2a9a2e8d-13c6-80e2-a0ec-ed173b528cc4", caption: "img/061.png" },
             { type: "link_group", links: [{text: "GitHub Repo", url: "https://github.com/tsengpokai/Homework7_U11310015"}, {text: "Notion Page", url: "https://www.notion.so/hw-2a9a2e8d13c680e2a0eced173b528cc4"}] }
         ]
     },
