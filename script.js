@@ -1,72 +1,67 @@
 // script.js
 
-// 1. 背景動畫：地質網格 (Terrain Mesh Simulation)
+// 1. 背景動態網格 (維持不變，增加流動感)
 const canvas = document.getElementById('geo-canvas');
 if (canvas) {
     const ctx = canvas.getContext('2d');
-    let width, height;
-
-    function resize() {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-    }
+    let w, h;
+    const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
     window.addEventListener('resize', resize);
     resize();
 
-    let time = 0;
+    let t = 0;
     function animate() {
-        ctx.clearRect(0, 0, width, height);
-        
-        ctx.strokeStyle = 'rgba(0, 242, 255, 0.12)';
+        ctx.clearRect(0, 0, w, h);
+        ctx.strokeStyle = 'rgba(0, 242, 255, 0.15)';
         ctx.lineWidth = 1;
         
-        const spacing = 60; // 網格間距
-        
-        // 繪製動態網格點
-        for (let x = 0; x < width; x += spacing) {
-            for (let y = 0; y < height; y += spacing) {
-                // 波動公式：模擬震波傳遞
-                const dist = Math.sqrt((x - width/2)**2 + (y - height/2)**2);
-                const wave = Math.sin(dist * 0.008 - time) * 12;
-                
-                const size = 2;
-                ctx.fillStyle = `rgba(0, 242, 255, ${0.1 + (wave+12)/50})`;
-                ctx.fillRect(x, y + wave, size, size);
+        for (let x = 0; x < w; x += 60) {
+            for (let y = 0; y < h; y += 60) {
+                const d = Math.sqrt((x - w/2)**2 + (y - h/2)**2);
+                const offset = Math.sin(d * 0.01 - t) * 10;
+                ctx.fillStyle = `rgba(0, 242, 255, ${0.1 + (offset+10)/60})`;
+                ctx.fillRect(x, y + offset, 2, 2);
             }
         }
-        
-        time += 0.03;
+        t += 0.02;
         requestAnimationFrame(animate);
     }
     animate();
 }
 
-// 2. 主頁面卡片渲染 (只在有 card-container 的頁面執行)
-const container = document.getElementById('card-container');
-if (container && typeof courseData !== 'undefined') {
+// 2. 垂直時間軸生成邏輯
+const timeline = document.getElementById('timeline-container');
+if (timeline && typeof courseData !== 'undefined') {
+    const keys = Object.keys(courseData);
     
-    // 遍歷 data.js 中的所有週次
-    Object.keys(courseData).forEach(key => {
+    keys.forEach((key, index) => {
         const item = courseData[key];
+        const side = index % 2 === 0 ? 'left' : 'right'; // 左右交錯
         
-        const card = document.createElement('div');
-        card.className = 'card';
-        card.onclick = () => {
-            window.location.href = `detail.html?id=${key}`;
-        };
-
-        const tagsHtml = item.tags.map(tag => `<span>${tag}</span>`).join('');
-
-        card.innerHTML = `
-            <div class="card-date">${item.date}</div>
-            <h3><i class="fas ${item.icon} fa-xs" style="color:var(--accent-cyan); margin-right:10px;"></i>${item.title}</h3>
-            <p style="color: #94a3b8; margin-bottom: 20px; font-size: 0.95rem; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;">${item.description}</p>
-            <div class="tags">${tagsHtml}</div>
-            <div style="margin-top:20px; text-align:right; color:var(--accent-blue); font-size:0.85rem; font-weight:bold;">
-                Read More <i class="fas fa-arrow-right ml-1"></i>
+        const div = document.createElement('div');
+        div.className = `container ${side}`;
+        
+        div.innerHTML = `
+            <div class="content" onclick="location.href='detail.html?id=${key}'" style="cursor:pointer;">
+                <div class="date">${item.date}</div>
+                <h2><i class="fas ${item.icon}"></i> ${item.title}</h2>
+                <p>${item.description}</p>
+                <div style="margin-top:10px;">
+                    ${item.tags.map(t => `<span style="font-size:0.8rem; color:var(--accent-cyan); margin-right:5px;">#${t}</span>`).join('')}
+                </div>
             </div>
         `;
-
-        container.appendChild(card);
+        timeline.appendChild(div);
     });
+
+    // Scroll Animation Observer
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('show');
+            }
+        });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.container').forEach(el => observer.observe(el));
 }

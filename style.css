@@ -3,190 +3,160 @@
 
 :root {
     --bg-color: #050a14;
-    --card-bg: rgba(13, 22, 35, 0.85);
+    --card-bg: rgba(16, 28, 45, 0.85);
     --text-main: #e0e6ed;
     --text-muted: #94a3b8;
     --accent-cyan: #00f2ff;
     --accent-blue: #0077ff;
-    --border-color: rgba(0, 242, 255, 0.25);
+    --timeline-line: rgba(0, 242, 255, 0.3);
 }
 
 * { box-sizing: border-box; }
-
 body {
     font-family: 'Roboto', sans-serif;
     background-color: var(--bg-color);
     color: var(--text-main);
     overflow-x: hidden;
     margin: 0;
-    line-height: 1.6;
 }
 
 /* 背景 Canvas */
 #geo-canvas {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.4;
+    top: 0; left: 0; width: 100%; height: 100%;
+    z-index: -1; opacity: 0.5;
 }
 
-/* 標題區 */
+/* Header Animation */
 header {
     text-align: center;
-    padding: 80px 20px 50px;
+    padding: 100px 20px 60px;
     background: linear-gradient(180deg, rgba(5,10,20,1) 0%, rgba(5,10,20,0) 100%);
 }
-
 h1 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 3rem;
+    font-size: 3.5rem;
     background: linear-gradient(90deg, #fff, var(--accent-cyan));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 0.5rem;
-    letter-spacing: 2px;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+@keyframes glow {
+    from { text-shadow: 0 0 10px rgba(0, 242, 255, 0.2); }
+    to { text-shadow: 0 0 20px rgba(0, 242, 255, 0.6); }
 }
 
-/* Masonry 瀑布流佈局 */
-.masonry-container {
-    column-count: 3;
-    column-gap: 2rem;
-    padding: 2rem;
-    max-width: 1400px;
-    margin: 0 auto;
-}
-
-@media (max-width: 1024px) { .masonry-container { column-count: 2; } }
-@media (max-width: 768px) { .masonry-container { column-count: 1; } }
-
-/* 卡片設計 */
-.card {
-    background: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 2rem;
-    margin-bottom: 2rem;
-    break-inside: avoid;
-    backdrop-filter: blur(8px);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    cursor: pointer;
+/* Timeline Container */
+.timeline {
     position: relative;
-    overflow: hidden;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px;
 }
-
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px rgba(0, 242, 255, 0.15);
-    border-color: var(--accent-cyan);
-}
-
-.card::before {
+/* The central line */
+.timeline::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
     width: 4px;
-    height: 100%;
-    background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-blue));
+    background-color: var(--timeline-line);
+    top: 0; bottom: 0; left: 50%;
+    margin-left: -2px;
+    box-shadow: 0 0 15px var(--accent-cyan);
 }
 
-.card-date {
-    font-family: 'Orbitron', sans-serif;
-    color: var(--accent-cyan);
-    font-size: 0.85rem;
-    margin-bottom: 0.5rem;
-    opacity: 0.8;
-}
-
-.card h3 {
-    font-size: 1.4rem;
-    margin: 0.5rem 0 1rem;
-    color: #fff;
-    font-weight: 700;
-}
-
-.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
-.tags span {
-    background: rgba(0, 242, 255, 0.08);
-    color: var(--accent-cyan);
-    padding: 3px 8px;
-    border-radius: 4px;
-    font-size: 0.75rem;
-    border: 1px solid rgba(0, 242, 255, 0.2);
-}
-
-/* 詳細頁面樣式 */
-.detail-container {
-    max-width: 1000px;
-    margin: 40px auto;
-    padding: 0 20px 60px;
-}
-
-.back-btn {
-    display: inline-flex;
-    align-items: center;
-    color: var(--accent-cyan);
-    text-decoration: none;
-    margin-bottom: 30px;
-    font-weight: bold;
-    font-size: 1.1rem;
-    transition: 0.3s;
-    background: rgba(0,0,0,0.3);
-    padding: 10px 20px;
-    border-radius: 50px;
-    border: 1px solid var(--border-color);
-}
-.back-btn:hover { background: var(--accent-cyan); color: #000; }
-
-.content-block {
-    background: rgba(13, 22, 35, 0.9);
-    border: 1px solid var(--border-color);
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 0 50px rgba(0,0,0,0.5);
-}
-
-.math-box {
-    background: rgba(0,0,0,0.4);
-    padding: 20px;
-    border-left: 4px solid var(--accent-cyan);
-    margin: 25px 0;
-    overflow-x: auto;
-    font-size: 1.1rem;
-}
-
-/* 遊戲區塊樣式 */
-.game-box {
-    background: rgba(5, 15, 25, 0.8);
-    border: 2px solid var(--accent-cyan);
-    border-radius: 16px;
-    padding: 30px;
-    margin-top: 40px;
-    box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
-}
-
-.slider-group { margin-bottom: 25px; }
-.slider-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-weight: 500;}
-input[type=range] { width: 100%; accent-color: var(--accent-cyan); cursor: pointer; }
-
-.visualizer {
-    height: 250px;
-    background: linear-gradient(to bottom, #333, #500);
-    border-radius: 8px;
+/* Timeline Card Containers */
+.container {
+    padding: 10px 40px;
     position: relative;
-    margin-top: 20px;
-    overflow: hidden;
-    border: 1px solid #555;
+    background-color: inherit;
+    width: 50%;
+    opacity: 0; /* Hidden initially for animation */
+    transform: translateY(50px);
+    transition: all 0.8s ease-out;
 }
-.drill-bit {
+.container.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.left { left: 0; }
+.right { left: 50%; }
+
+/* The dots on the timeline */
+.container::after {
+    content: '';
     position: absolute;
-    left: 50%; top: 0;
-    transform: translateX(-50%);
-    width: 4px; height: 0%;
-    background: #fff;
-    transition: height 0.3s;
-    box-shadow: 0 0 10px white;
+    width: 20px; height: 20px;
+    right: -10px; top: 25px;
+    background-color: var(--bg-color);
+    border: 4px solid var(--accent-cyan);
+    border-radius: 50%;
+    z-index: 1;
+    box-shadow: 0 0 10px var(--accent-cyan);
 }
+.right::after { left: -10px; }
+
+/* Arrows */
+.left::before {
+    content: " "; position: absolute; top: 25px; right: 30px;
+    border: medium solid white; border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent var(--card-bg);
+}
+.right::before {
+    content: " "; position: absolute; top: 25px; left: 30px;
+    border: medium solid white; border-width: 10px 10px 10px 0;
+    border-color: transparent var(--card-bg) transparent transparent;
+}
+
+/* Card Content */
+.content {
+    padding: 20px 30px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    position: relative;
+    backdrop-filter: blur(5px);
+    transition: transform 0.3s;
+}
+.content:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 25px rgba(0, 242, 255, 0.2);
+    border-color: var(--accent-cyan);
+}
+.content h2 { margin-top: 0; color: var(--accent-cyan); font-family: 'Orbitron'; }
+.date { font-size: 0.9rem; color: #aaa; margin-bottom: 10px; }
+
+/* Responsive Timeline */
+@media screen and (max-width: 768px) {
+    .timeline::after { left: 31px; }
+    .container { width: 100%; padding-left: 70px; padding-right: 25px; }
+    .container::before { left: 60px; border: medium solid white; border-width: 10px 10px 10px 0; border-color: transparent var(--card-bg) transparent transparent; }
+    .left::after, .right::after { left: 21px; }
+    .right { left: 0%; }
+}
+
+/* Detail Page Styles */
+.detail-container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+.game-box {
+    background: rgba(0, 20, 40, 0.8);
+    border: 2px solid var(--accent-cyan);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 30px 0;
+    box-shadow: 0 0 20px rgba(0,242,255,0.1);
+}
+.slider-group { margin-bottom: 15px; }
+input[type=range] { width: 100%; accent-color: var(--accent-cyan); }
+
+/* Magnetic Game Styles */
+#mag-canvas {
+    width: 100%; height: 150px;
+    background: #000;
+    border: 1px solid #555;
+    margin-top: 10px;
+}
+.mag-legend { display: flex; justify-content: center; gap: 20px; margin-top: 5px; font-size: 0.8rem; color: #ccc;}
+.legend-box { width: 15px; height: 15px; display: inline-block; vertical-align: middle; margin-right: 5px; }
+
+/* Images */
+img { max-width: 100%; border-radius: 8px; border: 1px solid #444; margin: 10px 0; }
