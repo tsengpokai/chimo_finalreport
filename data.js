@@ -15,7 +15,7 @@ const courseData = {
             },
             {
                 type: "iframe",
-                src: "https://huggingface.co/spaces/tspokai/homework1",
+                src: "https://tspokai-homework1.hf.space",
                 caption: "Hugging Face Space 實作成果：地球物理互動網頁"
             },
             {
@@ -29,8 +29,6 @@ const courseData = {
                 body: "學會了利用 Pull Request (PR) 繳交作業，完成了從本地端到雲端的版控流程。"
             }
         ]
-        ,
-        iframe:"https://tspokai-homework1.hf.space"
     },
     "week2": {
         title: "Week 2: 震測理論推導",
