@@ -3,63 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>地球物理探索之旅 | 期末成果展</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>地球物理探索歷程 | Geophysics Portfolio</title>
+    <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
-    <link href="style.css" rel="stylesheet">
 </head>
 <body>
 
-    <canvas id="bg-canvas"></canvas>
+    <canvas id="geo-canvas"></canvas>
 
-    <nav class="fixed w-full z-50 glass-card px-6 py-4 flex justify-between items-center top-0">
-        <div class="text-xl md:text-2xl font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400">
-            GEOPHYSICS <span class="text-gray-400 text-sm font-light">Review 2025</span>
-        </div>
-        <div class="space-x-6 text-sm md:text-base font-medium">
-            <a href="#timeline" class="hover:text-blue-400 transition duration-300">旅程回顧</a>
-            <a href="#about" class="hover:text-emerald-400 transition duration-300">關於作者</a>
-        </div>
-    </nav>
-
-    <header class="h-screen flex flex-col justify-center items-center text-center px-4 relative">
-        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl z-10">
-            <h1 class="text-5xl md:text-8xl font-bold mb-6 neon-text-blue" data-aos="zoom-in">
-                探索地球的脈動
-            </h1>
-            <p class="text-lg md:text-2xl text-gray-300 mb-10 tracking-wide" data-aos="fade-up" data-aos-delay="200">
-                18 週地球物理學習全紀錄<br>
-                <span class="text-sm text-blue-400 font-mono">From Seismology to AI Integration</span>
-            </p>
-            <a href="#timeline" class="group inline-flex items-center px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-full text-white font-semibold transition transform hover:scale-105 shadow-lg shadow-blue-500/50" data-aos="fade-up" data-aos-delay="400">
-                開始回顧 
-                <i class="fas fa-arrow-down ml-2 group-hover:translate-y-1 transition"></i>
-            </a>
-        </div>
+    <header>
+        <h1>GEOPHYSICS EXPLORER</h1>
+        <p style="color: #94a3b8; font-size: 1.2rem;">地球物理通論 18 週學習全紀錄</p>
     </header>
 
-    <section id="timeline" class="py-24 relative container mx-auto px-4 min-h-screen">
-        <h2 class="text-4xl font-bold text-center mb-20 neon-text-green" data-aos="fade-down">學習軌跡</h2>
-        
-        <div class="timeline-line hidden md:block"></div>
+    <main class="masonry-container" id="card-container">
+        </main>
 
-        <div id="timeline-container" class="space-y-12 md:space-y-0">
-            </div>
-    </section>
-
-    <footer id="about" class="py-12 bg-gray-900 border-t border-gray-800 text-center relative z-10">
-        <div class="container mx-auto px-4">
-            <h3 class="text-2xl font-bold mb-4 text-white">關於作者</h3>
-            <p class="text-gray-400 mb-6">地球科學系 U11310015 曾柏凱</p>
-            <div class="flex justify-center space-x-4 mb-8">
-                <a href="https://github.com/tsengpokai" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-white hover:text-black transition"><i class="fab fa-github"></i></a>
-                <a href="https://huggingface.co/tspokai" target="_blank" class="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-yellow-400 hover:text-black transition"><i class="far fa-smile"></i></a>
-            </div>
-            <p class="text-xs text-gray-600">Copyright © 2025. All Rights Reserved.</p>
-        </div>
+    <footer style="text-align: center; padding: 40px; color: #555;">
+        &copy; 2025 U11310015 曾柏凱. All Rights Reserved.
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <script src="data.js"></script> <script src="script.js"></script> </body>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
 </html>
