@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* 新增微震遊戲樣式 */
+        #micro-canvas { width: 100%; height: 250px; background: #000; border: 1px solid #333; margin-top: 10px; border-radius: 4px; }
+        .monitor-panel { display: flex; justify-content: space-between; margin-top: 10px; font-family: monospace; color: #0f0; }
+    </style>
 </head>
 <body>
     <canvas id="geo-canvas"></canvas>
@@ -43,7 +48,6 @@
                 if(item.type === 'text') {
                     html += `<div style="margin-bottom:25px;"><h3 style="color:var(--accent-blue); margin-bottom:10px;">${item.heading || ''}</h3><p style="color:#ddd; line-height:1.8;">${item.body}</p></div>`;
                 } else if (item.type === 'image') {
-                     // 圖片占位符處理
                      html += `
                         <div style="text-align:center; margin: 20px 0; border: 1px dashed #555; padding: 20px;">
                             ${item.src.includes('http') || item.src.includes('.jpg') ? 
@@ -61,39 +65,62 @@
                     html += `<div style="margin-top:20px;">${item.links.map(l=>`<a href="${l.url}" target="_blank" style="background:var(--accent-blue); color:white; padding:10px 20px; text-decoration:none; border-radius:5px; margin-right:10px;">${l.text}</a>`).join('')}</div>`;
                 }
                 
-                // --- 遊戲 1: 磁條帶模擬器 ---
+                // --- Game 1: 磁條帶 (保留) ---
                 else if (item.type === 'game_magnetic') {
                     html += `
                         <div class="game-box">
                             <h2 style="color:var(--accent-cyan); text-align:center;"><i class="fas fa-magnet"></i> ${item.heading}</h2>
                             <p style="color:#ccc; text-align:center; margin-bottom:15px;">${item.caption}</p>
-                            <label style="color:#aaa;">時間軸 (百萬年): <span id="mag-time-val">0</span> Ma</label>
+                            <label style="color:#aaa;">時間軸 (Ma): <span id="mag-time-val">0</span></label>
                             <input type="range" id="mag-slider" min="0" max="100" value="0">
                             <canvas id="mag-canvas"></canvas>
-                            <div class="mag-legend">
-                                <div><span class="legend-box" style="background:#fff;"></span>正向極 (Normal)</div>
-                                <div><span class="legend-box" style="background:#333;"></span>反向極 (Reverse)</div>
-                            </div>
                         </div>`;
                 }
-                // --- 遊戲 2: 熱流模擬器 ---
+                // --- Game 2: 熱流模擬器 (還原上一版: 鑽井視覺化) ---
                 else if (item.type === 'game_heat') {
                     html += `
                         <div class="game-box">
                             <h2 style="color:var(--accent-cyan); text-align:center;"><i class="fas fa-fire"></i> ${item.heading}</h2>
-                            <p style="color:#ccc; text-align:center; margin-bottom:15px;">${item.caption}</p>
-                            <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
+                            <p style="color:#ccc; text-align:center; margin-bottom:20px;">${item.caption}</p>
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:40px;">
                                 <div>
-                                    <label style="color:#aaa;">導熱係數 k: <span id="k-val">2.5</span></label>
-                                    <input type="range" id="k-input" min="1" max="5" step="0.1" value="2.5">
-                                    <br><br>
-                                    <label style="color:#aaa;">地溫梯度: <span id="grad-val">30</span></label>
-                                    <input type="range" id="grad-input" min="10" max="80" value="30">
+                                    <div class="slider-group">
+                                        <label style="color:#fff;">導熱係數 k: <span id="val-k">2.5</span></label>
+                                        <input type="range" id="in-k" min="1.0" max="5.0" step="0.1" value="2.5">
+                                    </div>
+                                    <div class="slider-group">
+                                        <label style="color:#fff;">地溫梯度: <span id="val-grad">30</span></label>
+                                        <input type="range" id="in-grad" min="10" max="80" step="1" value="30">
+                                    </div>
+                                    <div class="slider-group">
+                                        <label style="color:#fff;">鑽井深度 (km): <span id="val-depth">3.0</span></label>
+                                        <input type="range" id="in-depth" min="1.0" max="10.0" step="0.5" value="3.0">
+                                    </div>
                                 </div>
-                                <div style="text-align:center; background:rgba(0,0,0,0.3); padding:20px; border-radius:10px;">
-                                    <div style="color:#aaa;">預測深部溫度</div>
-                                    <div style="font-size:2.5rem; color:var(--accent-cyan); font-weight:bold;"><span id="temp-res">110</span>°C</div>
+                                <div style="text-align:center;">
+                                    <div style="color:#aaa;">井底溫度</div>
+                                    <div style="font-size:3rem; color:var(--accent-cyan); font-weight:bold;"><span id="res-temp">110</span>°C</div>
+                                    <div class="visualizer" id="vis-bg" style="height:150px; background:#333; margin-top:10px; position:relative; overflow:hidden; border:1px solid #555;">
+                                        <div id="vis-drill" style="position:absolute; left:50%; top:0; width:4px; height:30%; background:#fff; transition:0.2s;"></div>
+                                        <div style="position:absolute; bottom:5px; right:5px; color:#fff; font-size:0.8rem;" id="depth-text">3km</div>
+                                    </div>
                                 </div>
+                            </div>
+                        </div>`;
+                }
+                // --- Game 3: 微震監測 (新增) ---
+                else if (item.type === 'game_microseismic') {
+                    html += `
+                        <div class="game-box">
+                            <h2 style="color:var(--accent-cyan); text-align:center;"><i class="fas fa-wave-square"></i> ${item.heading}</h2>
+                            <p style="color:#ccc; text-align:center;">${item.caption}</p>
+                            <label style="color:#aaa;">注水壓力 (Pressure): <span id="pressure-val">0</span> MPa</label>
+                            <input type="range" id="pressure-input" min="0" max="100" value="0" step="1">
+                            
+                            <canvas id="micro-canvas"></canvas>
+                            <div class="monitor-panel">
+                                <div>Status: <span id="status-text">SAFE</span></div>
+                                <div>Events: <span id="event-count">0</span></div>
                             </div>
                         </div>`;
                 }
@@ -103,46 +130,34 @@
             // 初始化遊戲
             setTimeout(() => {
                 if(document.getElementById('mag-slider')) initMagneticGame();
-                if(document.getElementById('k-input')) initHeatGame();
+                if(document.getElementById('in-k')) initHeatGame();
+                if(document.getElementById('pressure-input')) initMicroseismicGame();
             }, 100);
         }
 
-        // 遊戲 1 邏輯：磁條帶
+        // --- Game Logic ---
         function initMagneticGame() {
             const slider = document.getElementById('mag-slider');
             const canvas = document.getElementById('mag-canvas');
             const ctx = canvas.getContext('2d');
             const timeVal = document.getElementById('mag-time-val');
-            
-            // 模擬磁極倒轉歷史 (0=Normal, 1=Reverse)
+            // ... (同上一版邏輯)
             const polarityHistory = [];
             for(let i=0; i<100; i++) polarityHistory.push(Math.random() > 0.5 ? 1 : 0);
-
             function draw() {
                 const w = canvas.width = canvas.offsetWidth;
-                const h = canvas.height;
+                const h = canvas.height = 150;
                 const time = parseInt(slider.value);
                 timeVal.innerText = time;
-                
                 const centerX = w / 2;
-                const spreadRate = 3; // 擴張速率
-                const currentWidth = time * spreadRate;
-
+                const spreadRate = 3;
                 ctx.clearRect(0, 0, w, h);
-                
-                // 繪製洋脊中心
-                ctx.fillStyle = 'red';
-                ctx.fillRect(centerX - 1, 0, 2, h);
-
-                // 往兩側繪製
+                ctx.fillStyle = 'red'; ctx.fillRect(centerX - 1, 0, 2, h);
                 for(let t=0; t<time; t++) {
-                    const color = polarityHistory[t] === 1 ? '#333' : '#fff'; // 黑=反, 白=正
+                    const color = polarityHistory[t] === 1 ? '#333' : '#fff';
                     const xOffset = (time - t) * spreadRate;
-                    
                     ctx.fillStyle = color;
-                    // 左側
                     ctx.fillRect(centerX - xOffset, 0, spreadRate, h);
-                    // 右側 (對稱)
                     ctx.fillRect(centerX + xOffset - spreadRate, 0, spreadRate, h);
                 }
             }
@@ -150,24 +165,85 @@
             draw();
         }
 
-        // 遊戲 2 邏輯：熱流
         function initHeatGame() {
-            const kIn = document.getElementById('k-input');
-            const gIn = document.getElementById('grad-input');
-            
+            const inK = document.getElementById('in-k');
+            const inGrad = document.getElementById('in-grad');
+            const inDepth = document.getElementById('in-depth');
             function update() {
-                const k = parseFloat(kIn.value);
-                const g = parseFloat(gIn.value);
-                const depth = 3; // 固定深度 3km 簡化顯示
+                const k = parseFloat(inK.value);
+                const g = parseFloat(inGrad.value);
+                const d = parseFloat(inDepth.value);
                 
-                document.getElementById('k-val').innerText = k;
-                document.getElementById('grad-val').innerText = g;
+                document.getElementById('val-k').innerText = k.toFixed(1);
+                document.getElementById('val-grad').innerText = g;
+                document.getElementById('val-depth').innerText = d.toFixed(1);
+                document.getElementById('depth-text').innerText = d + "km";
+
+                const temp = 20 + g * d;
+                document.getElementById('res-temp').innerText = temp.toFixed(1);
                 
-                const temp = 20 + g * depth;
-                document.getElementById('temp-res').innerText = temp.toFixed(1);
+                // 視覺更新
+                const drillPercent = (d / 10) * 100;
+                document.getElementById('vis-drill').style.height = drillPercent + '%';
+                const intensity = Math.min((temp - 20) / 400, 1);
+                const r = Math.floor(intensity * 255);
+                document.getElementById('vis-bg').style.background = `linear-gradient(to bottom, #222, rgb(${r}, 0, 0))`;
             }
-            kIn.addEventListener('input', update);
-            gIn.addEventListener('input', update);
+            inK.addEventListener('input', update);
+            inGrad.addEventListener('input', update);
+            inDepth.addEventListener('input', update);
+            update();
+        }
+
+        function initMicroseismicGame() {
+            const pInput = document.getElementById('pressure-input');
+            const canvas = document.getElementById('micro-canvas');
+            const ctx = canvas.getContext('2d');
+            let pressure = 0;
+            let events = []; // {x, y, life}
+
+            pInput.addEventListener('input', (e) => {
+                pressure = parseInt(e.target.value);
+                document.getElementById('pressure-val').innerText = pressure;
+                
+                // 狀態更新
+                const status = document.getElementById('status-text');
+                if(pressure < 40) { status.innerText = "SAFE"; status.style.color = "#0f0"; }
+                else if(pressure < 80) { status.innerText = "WARNING"; status.style.color = "yellow"; }
+                else { status.innerText = "DANGER: FRACTURE"; status.style.color = "red"; }
+            });
+
+            function loop() {
+                const w = canvas.width = canvas.offsetWidth;
+                const h = canvas.height = 250;
+                ctx.clearRect(0, 0, w, h);
+
+                // 畫井
+                ctx.strokeStyle = '#555'; ctx.lineWidth = 4;
+                ctx.beginPath(); ctx.moveTo(w/2, 0); ctx.lineTo(w/2, h*0.8); ctx.stroke();
+
+                // 產生微震
+                if(Math.random() * 100 < pressure) {
+                    const spread = pressure * 1.5;
+                    events.push({
+                        x: w/2 + (Math.random()-0.5) * spread,
+                        y: h*0.8 + (Math.random()-0.5) * spread/2,
+                        life: 1.0
+                    });
+                }
+
+                // 繪製微震點
+                events.forEach((e, i) => {
+                    ctx.fillStyle = `rgba(${pressure*2.5}, ${255-pressure*2}, 0, ${e.life})`;
+                    ctx.beginPath(); ctx.arc(e.x, e.y, 3, 0, Math.PI*2); ctx.fill();
+                    e.life -= 0.02;
+                    if(e.life <= 0) events.splice(i, 1);
+                });
+                
+                document.getElementById('event-count').innerText = events.length;
+                requestAnimationFrame(loop);
+            }
+            loop();
         }
     </script>
 </body>

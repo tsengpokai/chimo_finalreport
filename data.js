@@ -1,5 +1,6 @@
 // data.js
 const courseData = {
+    // ... Week 1-6 保持不變 ...
     "week1": {
         title: "Week 1: 地球物理與 AI 工具建置",
         date: "2025/09/10",
@@ -74,46 +75,59 @@ const courseData = {
             { type: "iframe", src: "https://tspokai-hw8.hf.space", caption: "Gradio 實作：Free Air Anomaly 互動展示" }
         ]
     },
+
+    // --- Week 7: AI Agent 詳細解釋 ---
     "week7": {
         title: "Week 7: AI Agent 工作流設計",
         date: "2025/10/22",
-        tags: ["AI Agent", "Dify", "Notion"],
+        tags: ["AI Agent", "Workflow", "Automation"],
         icon: "fa-robot",
-        description: "整合 Gemini API、Dify 與 Notion，打造自動化科研助理。",
+        description: "深入探討 AI Agent 架構，並實作 Gemini API + Dify 自動化工作流。",
         content: [
-            { type: "image", src: "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fhw-2a9a2e8d13c680e2a0eced173b528cc4.png?table=block&id=2a9a2e8d-13c6-80e2-a0ec-ed173b528cc4", caption: "工作流設計圖" },
+            { type: "text", heading: "什麼是 AI Agent 工作流？", body: "AI Agent (人工智慧代理) 不同於單純的問答機器人，它具備<strong>感知、思考、行動</strong>的能力。一個完整的工作流包含：<br>1. <strong>大腦 (LLM)：</strong>負責理解意圖與邏輯判斷 (如 Gemini)。<br>2. <strong>工具 (Tools)：</strong>執行具體任務 (如搜尋文獻、寫入資料庫)。<br>3. <strong>記憶 (Memory)：</strong>記住上下文以進行多輪對話。<br>本週我透過 Dify 平台將這些模組串聯，實現自動化科研。" },
+            { type: "text", heading: "如何創造工作流？(實作步驟)", body: "1. <strong>定義目標：</strong>我希望自動整理地球物理文獻並存檔。<br>2. <strong>設計 Prompt：</strong>設定 AI 角色為「科研助理」，並規定輸出格式 (JSON)。<br>3. <strong>串接 API：</strong>在 Dify 中設定 Google Gemini API Key。<br>4. <strong>連結 Notion：</strong>透過 webhook 將 AI 生成的摘要自動寫入 Notion Database。" },
+            { type: "image", src: "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fhw-2a9a2e8d13c680e2a0eced173b528cc4.png?table=block&id=2a9a2e8d-13c6-80e2-a0ec-ed173b528cc4", caption: "AI Agent 工作流架構圖" },
             { type: "link_group", links: [{text: "GitHub Repo", url: "https://github.com/tsengpokai/Homework7_U11310015"}, {text: "Notion Page", url: "https://www.notion.so/hw-2a9a2e8d13c680e2a0eced173b528cc4"}] }
         ]
     },
+    
     "week8": { title: "Week 8: 期中考", date: "2025/10/29", tags: ["Exam"], icon: "fa-pen-alt", description: "期中知識檢核。", content: [{ type: "text", heading: "期中總結", body: "複習震測公式、重力異常與地球物理基礎。" }] },
+
+    // --- Week 9: 南美洲板塊詳細分析 (恢復詳細版) ---
     "week9": {
         title: "Week 9: 南美洲板塊構造分析",
         date: "2025/11/05",
-        tags: ["Plate Tectonics", "PyGMT", "Colab"],
+        tags: ["Plate Tectonics", "PyGMT", "South America"],
         icon: "fa-globe-americas",
         description: "利用 PyGMT 繪圖，深入分析南美洲周邊的五大板塊邊界特性。",
         content: [
-            { type: "text", heading: "板塊邊界分析", body: "詳細分析了南美板塊與納茲卡(聚合)、非洲(張裂)、加勒比海(複雜)、南極(張裂)及斯科細亞(轉形)板塊的互動關係。" },
+            { type: "text", heading: "一、南美洲板塊 vs 納茲卡板塊 (Nazca)", body: "<strong>[聚合型邊界]</strong> 納茲卡板塊(海洋)向東隱沒至南美大陸之下。<br><ul><li><strong>景觀：</strong>形成全球最長的陸上山脈—<strong>安地斯山脈</strong>，以及深邃的<strong>秘魯-智利海溝</strong>。</li><li><strong>災害：</strong>隱沒帶導致劇烈地震(如1960智利大地震)與火山弧分佈。</li></ul>" },
+            { type: "text", heading: "二、南美洲板塊 vs 非洲板塊", body: "<strong>[張裂型邊界]</strong> 兩者由<strong>大西洋中洋脊 (Mid-Atlantic Ridge)</strong> 分開。<br><ul><li><strong>機制：</strong>岩漿上湧生成新洋殼，推動南美洲向西漂移。</li><li><strong>特徵：</strong>海底火山、正斷層與持續變寬的大西洋。</li></ul>" },
+            { type: "text", heading: "三、南美洲板塊 vs 加勒比海板塊", body: "<strong>[複雜邊界]</strong> 位於南美洲北部，混合了轉形斷層與聚合作用。<br><ul><li><strong>特徵：</strong>板塊間的剪切與擠壓，造就了哥倫比亞北部的褶皺山脈與小型火山弧 (如特立尼達島附近)。</li></ul>" },
+            { type: "text", heading: "四、南美洲板塊 vs 南極板塊", body: "<strong>[張裂型邊界]</strong> 位於南大西洋海域。<br><ul><li><strong>特徵：</strong>形成南大西洋洋中脊，海底擴張作用活躍，伴隨新洋殼生成。</li></ul>" },
+            { type: "text", heading: "五、南美洲板塊 vs 斯科細亞板塊 (Scotia)", body: "<strong>[轉形邊界]</strong> 位於南美洲南端。<br><ul><li><strong>特徵：</strong>形成斯科細亞海及深海斷層帶，主要表現為板塊間的水平剪切運動。</li></ul>" },
             { type: "link_group", links: [{text: "Google Colab 程式碼", url: "https://colab.research.google.com/github/tsengpokai/-10--/blob/main/PyGMT.ipynb"}] }
         ]
     },
+
     "week10": { title: "Week 10: PyGMT 教學網站", date: "2025/11/12", tags: ["Web Dev"], icon: "fa-laptop-code", description: "製作 PyGMT 入門教學網頁。", content: [{ type: "iframe", src: "https://tsengpokai.github.io/intro-learnPYGMT/", caption: "GitHub Pages 成果" }] },
     
-    // --- 合併週次 ---
+    // --- Week 11-13: 綜合探勘與三個遊戲 ---
     "week11_13": {
-        title: "Week 11-13: 板塊構造、古地磁與地熱綜合探勘",
+        title: "Week 11-13: 板塊構造與地熱綜合探勘",
         date: "2025/11/19 - 12/03",
-        tags: ["Paleomagnetism", "Geothermal", "Games"],
+        tags: ["Paleomagnetism", "Geothermal", "Gamification"],
         icon: "fa-fire",
-        description: "深度整合古地磁學證據、板塊構造理論與地熱探勘技術，並包含兩個互動模擬實驗。",
+        description: "深度整合古地磁學證據、板塊構造理論與地熱探勘技術，並包含三個互動模擬實驗。",
         content: [
             { type: "text", heading: "1. 古地磁與海底擴張 (Week 11)", body: "<strong>岩石的秘密羅盤：</strong>當岩漿冷卻低於居禮溫度時，磁性礦物會紀錄當下的地磁方向。透過分析洋脊兩側的磁條帶對稱性，我們證實了海底正在擴張，且地磁極會發生倒轉。" },
-            { type: "game_magnetic", heading: "互動實驗 I：海底擴張磁條帶模擬器", caption: "拖動滑桿，觀察隨著時間推移，洋脊如何製造新地殼並紀錄地磁倒轉。" },
+            { type: "game_magnetic", heading: "Game I：海底擴張磁條帶模擬器", caption: "拖動滑桿，觀察隨著時間推移，洋脊如何製造新地殼並紀錄地磁倒轉。" },
             
-            { type: "text", heading: "2. 地球熱分佈 (Week 12)", body: "地球內部的熱能驅動了板塊運動。全球熱流值 (Heat Flow) 分佈不均：中洋脊最高，古老地盾最低。地熱探勘平台即是利用這些數據來尋找能源潛力區。" },
+            { type: "text", heading: "2. 地球熱分佈與地熱技術 (Week 12-13)", body: "地熱探勘仰賴多種地球物理方法。<strong>大地電磁法 (MT)</strong> 利用地下電阻率差異尋找黏土蓋層；<strong>熱流模擬</strong>則幫助我們推估深部溫度。此外，<strong>微震監測</strong>對於地熱注水過程中的安全性至關重要。" },
+            { type: "game_heat", heading: "Game II：地殼熱流模擬器", caption: "調整導熱參數與地溫梯度，模擬鑽井深度與溫度變化。(還原經典版)" },
             
-            { type: "text", heading: "3. 地熱探勘前沿技術 (Week 13)", body: "整合了<strong>大地電磁法 (MT)</strong> 測量電阻率結構、<strong>微震監測</strong>追蹤裂隙，以及<strong>AI 人工智慧</strong>輔助鑽井決策，大幅提升了地熱開發的成功率。" },
-            { type: "game_heat", heading: "互動實驗 II：地殼熱流模擬器", caption: "調整導熱參數，模擬地底溫度變化。" }
+            { type: "text", heading: "3. 微震監測 (Microseismic Monitoring)", body: "在地熱開發(EGS)中，我們需要將水注入地底以撐開裂隙。這時需即時監控誘發的微小地震，以追蹤流體路徑並防止災害。" },
+            { type: "game_microseismic", heading: "Game III：微震監測儀表板 (New)", caption: "調整「注水壓力」，觀察誘發微震的分佈與破裂範圍。" }
         ]
     },
     // ----------------
