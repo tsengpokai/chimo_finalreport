@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>詳細內容</title>
+    <title>詳細內容 | Geophysics</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
@@ -12,6 +12,7 @@
     <canvas id="geo-canvas"></canvas>
 
     <div class="detail-container">
+        <br><br>
         <a href="index.html" class="back-btn"><i class="fas fa-arrow-left mr-2"></i> 返回儀表板</a>
         
         <div id="content-wrapper" class="content-block">
@@ -21,7 +22,7 @@
     <script src="data.js"></script>
     <script src="script.js"></script>
     <script>
-        // detail.html 專屬邏輯
+        // detail.html 專屬渲染與遊戲邏輯
         const params = new URLSearchParams(window.location.search);
         const id = params.get('id');
         const data = courseData[id];
@@ -29,11 +30,11 @@
 
         if(data) {
             let html = `
-                <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 30px;">
-                    <div style="color: var(--accent-cyan); font-family: 'Orbitron'; margin-bottom: 10px;">${data.date}</div>
-                    <h1 style="font-size: 2.5rem; margin-bottom: 15px;">${data.title}</h1>
+                <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 30px; margin-bottom: 40px;">
+                    <div style="color: var(--accent-cyan); font-family: 'Orbitron'; margin-bottom: 15px; font-size: 1.1rem;">${data.date}</div>
+                    <h1 style="font-size: 2.8rem; margin-bottom: 20px; line-height: 1.2;">${data.title}</h1>
                     <div class="tags">
-                        ${data.tags.map(t => `<span>#${t}</span>`).join('')}
+                        ${data.tags.map(t => `<span style="padding: 5px 12px; font-size: 0.9rem;">#${t}</span>`).join('')}
                     </div>
                 </div>
             `;
@@ -41,65 +42,74 @@
             data.content.forEach(item => {
                 if(item.type === 'text') {
                     html += `
-                        <div style="margin-bottom: 25px;">
-                            ${item.heading ? `<h3 style="color:var(--accent-blue); margin-bottom:10px;"><i class="fas fa-caret-right"></i> ${item.heading}</h3>` : ''}
-                            <p style="line-height: 1.8; color: #cbd5e1;">${item.body}</p>
+                        <div style="margin-bottom: 30px;">
+                            ${item.heading ? `<h3 style="color:var(--accent-blue); margin-bottom:12px; font-size:1.5rem;"><i class="fas fa-caret-right"></i> ${item.heading}</h3>` : ''}
+                            <p style="line-height: 1.9; color: #cbd5e1; font-size: 1.05rem;">${item.body}</p>
                         </div>`;
                 } else if (item.type === 'math') {
                     html += `
                         <div class="math-box">
-                            ${item.heading ? `<div style="font-weight:bold; color:var(--accent-cyan); margin-bottom:5px;">${item.heading}</div>` : ''}
+                            ${item.heading ? `<div style="font-weight:bold; color:var(--accent-cyan); margin-bottom:10px;">${item.heading}</div>` : ''}
                             ${item.body}
                         </div>`;
                 } else if (item.type === 'image') {
                     html += `
-                        <div style="margin: 20px 0; text-align: center;">
-                            <img src="${item.src}" style="max-width:100%; border-radius:8px; border:1px solid #334155;" alt="Image">
-                            <p style="color: #64748b; font-size: 0.9rem; margin-top: 5px;">${item.caption}</p>
+                        <div style="margin: 30px 0; text-align: center;">
+                            <img src="${item.src}" style="max-width:100%; border-radius:8px; border:1px solid #334155; box-shadow: 0 5px 15px rgba(0,0,0,0.3);" alt="Image">
+                            <p style="color: #64748b; font-size: 0.9rem; margin-top: 10px; font-style: italic;">${item.caption}</p>
+                            ${item.src.includes('notion') ? '<p style="color:orange; font-size:0.8rem;">(若圖片無法顯示，請將 Notion 圖片連結更新至 data.js)</p>' : ''}
                         </div>`;
                 } else if (item.type === 'iframe') {
                     html += `
-                        <div style="margin: 30px 0;">
-                            <iframe src="${item.src}" width="100%" height="500px" style="border:none; border-radius:12px; background:#000;"></iframe>
+                        <div style="margin: 40px 0;">
+                            <div style="background:#000; padding:10px; border-radius:12px 12px 0 0; border:1px solid #333; display:flex; justify-content:space-between; align-items:center;">
+                                <span style="font-size:0.8rem; color:#aaa;">Interactive Preview</span>
+                                <a href="${item.src}" target="_blank" style="color:var(--accent-cyan); font-size:0.8rem;"><i class="fas fa-external-link-alt"></i> Open Fullscreen</a>
+                            </div>
+                            <iframe src="${item.src}" width="100%" height="600px" style="border:none; border-radius:0 0 12px 12px; background:#111;"></iframe>
                             <p style="text-align:center; color:#64748b; margin-top:10px;">${item.caption}</p>
                         </div>`;
                 } else if (item.type === 'link_group') {
-                    html += `<div style="display:flex; gap:10px; margin-top:20px;">`;
+                    html += `<div style="display:flex; gap:15px; margin-top:30px; flex-wrap:wrap;">`;
                     item.links.forEach(l => {
-                        html += `<a href="${l.url}" target="_blank" style="padding:10px 20px; background:var(--accent-blue); color:white; text-decoration:none; border-radius:5px;">${l.text}</a>`;
+                        html += `<a href="${l.url}" target="_blank" style="padding:12px 25px; background:var(--accent-blue); color:white; text-decoration:none; border-radius:6px; transition:0.3s; font-weight:bold;"><i class="fas fa-link mr-2"></i>${l.text}</a>`;
                     });
                     html += `</div>`;
                 } else if (item.type === 'game') {
-                    // 注入熱流模擬遊戲 HTML
+                    // Week 13 互動遊戲 HTML
                     html += `
                         <div class="game-box">
-                            <h2 style="text-align:center; color:var(--accent-cyan); margin-bottom:20px;"><i class="fas fa-fire-alt"></i> 地殼熱流模擬器</h2>
-                            <p style="text-align:center; margin-bottom:20px; font-size:0.9rem;">模擬傅立葉熱傳導定律，調整參數觀察地底溫度變化。</p>
+                            <h2 style="text-align:center; color:var(--accent-cyan); margin-bottom:20px; font-family:'Orbitron';"><i class="fas fa-temperature-high"></i> 地殼熱流模擬器</h2>
+                            <p style="text-align:center; margin-bottom:30px; font-size:1rem; color:#aaa;">請調整導熱係數與地溫梯度，觀察地底溫度變化。</p>
                             
-                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:40px;">
                                 <div>
                                     <div class="slider-group">
-                                        <label>導熱係數 k (W/m·K): <span id="val-k">2.5</span></label>
-                                        <input type="range" id="in-k" min="1" max="5" step="0.1" value="2.5">
+                                        <label>岩石導熱係數 k (W/m·K): <span id="val-k" style="color:white;">2.5</span></label>
+                                        <input type="range" id="in-k" min="1.0" max="5.0" step="0.1" value="2.5">
                                     </div>
                                     <div class="slider-group">
-                                        <label>地溫梯度 (C/km): <span id="val-grad">30</span></label>
+                                        <label>地溫梯度 Gradient (°C/km): <span id="val-grad" style="color:white;">30</span></label>
                                         <input type="range" id="in-grad" min="10" max="80" step="1" value="30">
                                     </div>
                                     <div class="slider-group">
-                                        <label>鑽井深度 (km): <span id="val-depth">3</span></label>
-                                        <input type="range" id="in-depth" min="1" max="10" step="0.5" value="3">
+                                        <label>模擬鑽井深度 Depth (km): <span id="val-depth" style="color:white;">3.0</span></label>
+                                        <input type="range" id="in-depth" min="1.0" max="10.0" step="0.5" value="3.0">
                                     </div>
                                 </div>
-                                <div style="text-align:center; display:flex; flex-direction:column; justify-content:center; background:rgba(0,0,0,0.3); border-radius:8px;">
-                                    <div>預測井底溫度</div>
-                                    <div style="font-size:2.5rem; color:var(--accent-cyan); font-weight:bold;"><span id="res-temp">110</span>°C</div>
-                                    <div style="margin-top:10px; font-size:0.9rem; color:#aaa;">地表熱流模擬值: <span id="res-q">75</span> mW/m²</div>
+                                <div style="text-align:center; display:flex; flex-direction:column; justify-content:center; background:rgba(0,0,0,0.3); border-radius:12px; padding:20px;">
+                                    <div style="color:#aaa; font-size:0.9rem;">預測井底溫度 (Bottom Hole Temp)</div>
+                                    <div style="font-size:3.5rem; color:var(--accent-cyan); font-weight:bold; margin:10px 0;"><span id="res-temp">110</span><span style="font-size:1.5rem">°C</span></div>
+                                    <div style="border-top:1px solid #444; padding-top:15px; margin-top:10px;">
+                                        <div style="color:#aaa; font-size:0.9rem;">地表熱流模擬值 (Heat Flow)</div>
+                                        <div style="font-size:1.5rem; color:#fff;"><span id="res-q">75</span> <span style="font-size:1rem; color:#aaa;">mW/m²</span></div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="visualizer" id="vis-bg">
                                 <div class="drill-bit" id="vis-drill"></div>
-                                <div style="position:absolute; bottom:5px; left:10px; font-size:0.8rem;">Crust</div>
+                                <div style="position:absolute; bottom:10px; left:15px; font-size:0.8rem; color:white; background:rgba(0,0,0,0.5); padding:2px 5px; border-radius:4px;">Crust Layer</div>
+                                <div style="position:absolute; bottom:10px; right:15px; font-size:0.8rem; color:white;" id="depth-marker">3km</div>
                             </div>
                         </div>
                     `;
@@ -107,17 +117,14 @@
             });
 
             wrapper.innerHTML = html;
-
-            // 如果有遊戲元素，啟動遊戲邏輯
-            if(document.getElementById('in-k')) {
-                initGame();
-            }
+            
+            // 啟動遊戲邏輯 (如果存在)
+            if(document.getElementById('in-k')) initGame();
 
         } else {
-            wrapper.innerHTML = "<h2 style='text-align:center'>找不到該週次資料</h2>";
+            wrapper.innerHTML = "<h2 style='text-align:center; color:red;'>找不到該週次資料，請檢查網址參數。</h2>";
         }
 
-        // 遊戲邏輯函數
         function initGame() {
             const inK = document.getElementById('in-k');
             const inGrad = document.getElementById('in-grad');
@@ -128,24 +135,29 @@
                 const grad = parseFloat(inGrad.value);
                 const depth = parseFloat(inDepth.value);
                 
-                document.getElementById('val-k').innerText = k;
+                document.getElementById('val-k').innerText = k.toFixed(1);
                 document.getElementById('val-grad').innerText = grad;
-                document.getElementById('val-depth').innerText = depth;
+                document.getElementById('val-depth').innerText = depth.toFixed(1);
 
-                const bottomTemp = 20 + (grad * depth); // 假設地表20度
-                const heatFlow = k * grad; // 簡化計算
+                // 計算：溫度 = 地表溫(20) + 梯度*深度
+                const bottomTemp = 20 + (grad * depth); 
+                // 計算：熱流 = k * grad (單位轉換簡化為直接乘積顯示概念)
+                const heatFlow = k * grad; 
 
                 document.getElementById('res-temp').innerText = bottomTemp.toFixed(1);
                 document.getElementById('res-q').innerText = heatFlow.toFixed(1);
+                document.getElementById('depth-marker').innerText = depth + "km";
 
-                // 視覺更新
+                // 視覺動畫
                 const drillPercent = (depth / 10) * 100;
                 document.getElementById('vis-drill').style.height = drillPercent + '%';
                 
-                // 顏色隨溫度變紅
-                const intensity = Math.min((bottomTemp - 20) / 300, 1);
+                // 顏色變化：根據溫度從黑變紅
+                const maxTemp = 400; 
+                const intensity = Math.min((bottomTemp - 20) / (maxTemp - 20), 1);
                 const r = Math.floor(intensity * 255);
-                document.getElementById('vis-bg').style.background = `linear-gradient(to bottom, #222, rgb(${r}, 0, 0))`;
+                const b = Math.floor((1-intensity) * 50);
+                document.getElementById('vis-bg').style.background = `linear-gradient(to bottom, #222, rgb(${r}, 0, ${b}))`;
             }
 
             inK.addEventListener('input', update);

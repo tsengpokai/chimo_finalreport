@@ -3,13 +3,15 @@
 
 :root {
     --bg-color: #050a14;
-    --card-bg: rgba(13, 22, 35, 0.8);
+    --card-bg: rgba(13, 22, 35, 0.85);
     --text-main: #e0e6ed;
     --text-muted: #94a3b8;
     --accent-cyan: #00f2ff;
     --accent-blue: #0077ff;
-    --border-color: rgba(0, 242, 255, 0.2);
+    --border-color: rgba(0, 242, 255, 0.25);
 }
+
+* { box-sizing: border-box; }
 
 body {
     font-family: 'Roboto', sans-serif;
@@ -17,6 +19,7 @@ body {
     color: var(--text-main);
     overflow-x: hidden;
     margin: 0;
+    line-height: 1.6;
 }
 
 /* 背景 Canvas */
@@ -27,23 +30,23 @@ body {
     width: 100%;
     height: 100%;
     z-index: -1;
-    opacity: 0.5;
+    opacity: 0.4;
 }
 
 /* 標題區 */
 header {
     text-align: center;
-    padding: 100px 20px 60px;
+    padding: 80px 20px 50px;
     background: linear-gradient(180deg, rgba(5,10,20,1) 0%, rgba(5,10,20,0) 100%);
 }
 
 h1 {
     font-family: 'Orbitron', sans-serif;
-    font-size: 3.5rem;
+    font-size: 3rem;
     background: linear-gradient(90deg, #fff, var(--accent-cyan));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     letter-spacing: 2px;
 }
 
@@ -67,7 +70,7 @@ h1 {
     padding: 2rem;
     margin-bottom: 2rem;
     break-inside: avoid;
-    backdrop-filter: blur(10px);
+    backdrop-filter: blur(8px);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     cursor: pointer;
     position: relative;
@@ -87,38 +90,39 @@ h1 {
     left: 0;
     width: 4px;
     height: 100%;
-    background: var(--accent-cyan);
-    opacity: 0.5;
+    background: linear-gradient(to bottom, var(--accent-cyan), var(--accent-blue));
 }
 
 .card-date {
     font-family: 'Orbitron', sans-serif;
     color: var(--accent-cyan);
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     margin-bottom: 0.5rem;
+    opacity: 0.8;
 }
 
 .card h3 {
-    font-size: 1.5rem;
-    margin-bottom: 1rem;
+    font-size: 1.4rem;
+    margin: 0.5rem 0 1rem;
     color: #fff;
+    font-weight: 700;
 }
 
+.tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 15px; }
 .tags span {
-    background: rgba(0, 242, 255, 0.1);
+    background: rgba(0, 242, 255, 0.08);
     color: var(--accent-cyan);
-    padding: 2px 8px;
+    padding: 3px 8px;
     border-radius: 4px;
-    font-size: 0.8rem;
-    margin-right: 5px;
-    border: 1px solid rgba(0, 242, 255, 0.3);
+    font-size: 0.75rem;
+    border: 1px solid rgba(0, 242, 255, 0.2);
 }
 
 /* 詳細頁面樣式 */
 .detail-container {
     max-width: 1000px;
     margin: 40px auto;
-    padding: 20px;
+    padding: 0 20px 60px;
 }
 
 .back-btn {
@@ -126,52 +130,63 @@ h1 {
     align-items: center;
     color: var(--accent-cyan);
     text-decoration: none;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     font-weight: bold;
+    font-size: 1.1rem;
     transition: 0.3s;
+    background: rgba(0,0,0,0.3);
+    padding: 10px 20px;
+    border-radius: 50px;
+    border: 1px solid var(--border-color);
 }
-.back-btn:hover { text-shadow: 0 0 10px var(--accent-cyan); }
+.back-btn:hover { background: var(--accent-cyan); color: #000; }
 
 .content-block {
     background: rgba(13, 22, 35, 0.9);
     border: 1px solid var(--border-color);
     padding: 40px;
     border-radius: 16px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.5);
 }
 
 .math-box {
-    background: rgba(0,0,0,0.3);
-    padding: 15px;
-    border-left: 3px solid var(--accent-cyan);
-    margin: 20px 0;
+    background: rgba(0,0,0,0.4);
+    padding: 20px;
+    border-left: 4px solid var(--accent-cyan);
+    margin: 25px 0;
     overflow-x: auto;
+    font-size: 1.1rem;
 }
 
 /* 遊戲區塊樣式 */
 .game-box {
-    background: rgba(0, 10, 20, 0.6);
-    border: 1px solid var(--accent-cyan);
-    border-radius: 12px;
+    background: rgba(5, 15, 25, 0.8);
+    border: 2px solid var(--accent-cyan);
+    border-radius: 16px;
     padding: 30px;
-    margin-top: 30px;
+    margin-top: 40px;
+    box-shadow: 0 0 30px rgba(0, 242, 255, 0.1);
 }
 
-.slider-group { margin-bottom: 20px; }
-.slider-group label { display: block; margin-bottom: 5px; color: var(--text-muted); }
-input[type=range] { width: 100%; accent-color: var(--accent-cyan); }
+.slider-group { margin-bottom: 25px; }
+.slider-group label { display: block; margin-bottom: 8px; color: var(--text-muted); font-weight: 500;}
+input[type=range] { width: 100%; accent-color: var(--accent-cyan); cursor: pointer; }
 
 .visualizer {
-    height: 200px;
+    height: 250px;
     background: linear-gradient(to bottom, #333, #500);
     border-radius: 8px;
     position: relative;
     margin-top: 20px;
     overflow: hidden;
+    border: 1px solid #555;
 }
 .drill-bit {
     position: absolute;
     left: 50%; top: 0;
-    width: 2px; height: 0%;
+    transform: translateX(-50%);
+    width: 4px; height: 0%;
     background: #fff;
     transition: height 0.3s;
+    box-shadow: 0 0 10px white;
 }
