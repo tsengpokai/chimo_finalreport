@@ -3,82 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>地球物理期末總回顧 | U11310015 曾柏凱</title>
+    <title>地球物理探索之旅 | 期末成果展</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css" rel="stylesheet">
     <style>
-        body { background-color: #0f172a; color: #e2e8f0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .neon-text { text-shadow: 0 0 10px #38bdf8, 0 0 20px #38bdf8; }
-        .timeline-line { position: absolute; left: 50%; transform: translateX(-50%); width: 4px; height: 100%; background: linear-gradient(to bottom, #38bdf8, #a855f7); z-index: 0; }
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;500;700&display=swap');
+        body { font-family: 'Noto Sans TC', sans-serif; background-color: #0f172a; color: #e2e8f0; overflow-x: hidden; }
+        .canvas-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.6; }
         .glass-card { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .card-hover:hover { transform: scale(1.05); border-color: #38bdf8; box-shadow: 0 0 15px rgba(56, 189, 248, 0.5); }
+        .timeline-line { position: absolute; left: 50%; transform: translateX(-50%); width: 4px; height: 100%; background: linear-gradient(to bottom, #3b82f6, #10b981, #f59e0b); z-index: 0; }
+        .glow-text { text-shadow: 0 0 10px rgba(59, 130, 246, 0.5); }
     </style>
 </head>
-<body class="overflow-x-hidden">
+<body>
 
-    <header class="h-screen flex flex-col justify-center items-center text-center relative overflow-hidden">
-        <div class="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop')] bg-cover bg-center opacity-20"></div>
-        <h1 class="text-6xl font-bold mb-4 neon-text z-10" data-aos="fade-down">地球物理學期回顧</h1>
-        <p class="text-xl text-cyan-300 z-10" data-aos="fade-up" data-aos-delay="200">Exploring the Earth with Data & Physics</p>
-        <p class="mt-4 text-gray-400 z-10">U11310015 曾柏凱 | Fall 2025</p>
-        <div class="mt-10 animate-bounce text-3xl">⬇</div>
+    <canvas id="canvas" class="canvas-bg"></canvas>
+
+    <nav class="fixed w-full z-50 glass-card px-6 py-4 flex justify-between items-center">
+        <div class="text-2xl font-bold text-blue-400 tracking-wider">GEOPHYSICS <span class="text-white text-sm">Review 2025</span></div>
+        <div class="space-x-4">
+            <a href="#timeline" class="hover:text-blue-400 transition">課程進度</a>
+            <a href="#about" class="hover:text-blue-400 transition">關於我</a>
+        </div>
+    </nav>
+
+    <header class="h-screen flex flex-col justify-center items-center text-center px-4">
+        <h1 class="text-6xl md:text-8xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-teal-400 to-emerald-400" data-aos="fade-down">
+            探索地球的脈動
+        </h1>
+        <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-2xl" data-aos="fade-up" data-aos-delay="200">
+            從地震波分析到 AI 監測，紀錄 18 週的地球物理學習與實踐。
+        </p>
+        <a href="#timeline" class="px-8 py-3 bg-blue-600 hover:bg-blue-700 rounded-full text-white font-semibold transition transform hover:scale-105 shadow-lg shadow-blue-500/50" data-aos="fade-up" data-aos-delay="400">
+            開始回顧 <i class="fas fa-arrow-down ml-2"></i>
+        </a>
     </header>
 
-    <main class="container mx-auto px-4 py-20 relative">
+    <section id="timeline" class="py-20 relative container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-center mb-16 text-white glow-text">學習軌跡</h2>
         <div class="timeline-line hidden md:block"></div>
-        
-        <div id="timeline-container">
+
+        <div class="flex flex-col md:flex-row justify-between items-center mb-20 w-full relative z-10" data-aos="fade-right">
+            <div class="md:w-5/12 order-1 md:order-1 glass-card p-6 rounded-xl hover:border-blue-500 transition border-l-4 border-blue-500">
+                <div class="text-sm text-blue-400 font-bold mb-2">Week 1-2</div>
+                <h3 class="text-2xl font-bold mb-3">工具建置 & 震測基礎</h3>
+                <p class="text-gray-400 mb-4">建立 GitHub/Hugging Face 生態系，學習折射與反射震測原理，並完成臨界折射波公式推導。</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-gray-700 rounded text-xs">GitHub</span>
+                    <span class="px-2 py-1 bg-gray-700 rounded text-xs">Hugging Face</span>
+                    <span class="px-2 py-1 bg-gray-700 rounded text-xs">Math Derivation</span>
+                </div>
+                <a href="week_detail.html#week1" class="text-blue-400 hover:text-white font-semibold">查看詳細作業 &rarr;</a>
             </div>
-    </main>
+            <div class="md:w-2/12 order-2 flex justify-center py-4 md:py-0">
+                <div class="w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/50 border-4 border-gray-900">
+                    <i class="fas fa-tools text-white"></i>
+                </div>
+            </div>
+            <div class="md:w-5/12 order-3 md:order-3"></div>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-between items-center mb-20 w-full relative z-10" data-aos="fade-left">
+            <div class="md:w-5/12 order-1 md:order-1"></div>
+            <div class="md:w-2/12 order-2 flex justify-center py-4 md:py-0">
+                <div class="w-12 h-12 bg-emerald-600 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/50 border-4 border-gray-900">
+                    <i class="fas fa-hammer text-white"></i>
+                </div>
+            </div>
+            <div class="md:w-5/12 order-3 md:order-2 glass-card p-6 rounded-xl hover:border-emerald-500 transition border-l-4 border-emerald-500">
+                <div class="text-sm text-emerald-400 font-bold mb-2">Week 3</div>
+                <h3 class="text-2xl font-bold mb-3">校園折射震測實驗</h3>
+                <p class="text-gray-400 mb-4">實地操作 Geophone 與記錄儀，進行地下淺層結構探勘。計算 V1, V2 及地層厚度。</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-gray-700 rounded text-xs">Field Work</span>
+                    <span class="px-2 py-1 bg-gray-700 rounded text-xs">Data Processing</span>
+                </div>
+                <a href="week_detail.html#week3" class="text-emerald-400 hover:text-white font-semibold">查看實驗報告 &rarr;</a>
+            </div>
+        </div>
+
+        <div class="flex flex-col md:flex-row justify-between items-center mb-20 w-full relative z-10" data-aos="fade-right">
+            <div class="md:w-5/12 order-1 md:order-1 glass-card p-6 rounded-xl hover:border-purple-500 transition border-l-4 border-purple-500">
+                <div class="text-sm text-purple-400 font-bold mb-2">Week 5-7</div>
+                <h3 class="text-2xl font-bold mb-3">重力探勘 & ObsPy/AI 實作</h3>
+                <p class="text-gray-400 mb-4">利用 ObsPy 抓取 IRIS 地震波形，並製作 Free Air Anomaly 的 Gradio 互動程式。</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-gray-700 rounded text-xs">Python</span>
+                    <span class="px-2 py-1 bg-gray-700 rounded text-xs">ObsPy</span>
+                    <span class="px-2 py-1 bg-gray-700 rounded text-xs">Gradio</span>
+                </div>
+                <a href="week_detail.html#week5" class="text-purple-400 hover:text-white font-semibold">查看程式碼與圖表 &rarr;</a>
+            </div>
+            <div class="md:w-2/12 order-2 flex justify-center py-4 md:py-0">
+                <div class="w-12 h-12 bg-purple-600 rounded-full flex items-center justify-center shadow-lg shadow-purple-500/50 border-4 border-gray-900">
+                    <i class="fas fa-code text-white"></i>
+                </div>
+            </div>
+            <div class="md:w-5/12 order-3 md:order-3"></div>
+        </div>
+
+         <div class="flex flex-col md:flex-row justify-between items-center mb-20 w-full relative z-10" data-aos="fade-left">
+            <div class="md:w-5/12 order-1 md:order-1"></div>
+            <div class="md:w-2/12 order-2 flex justify-center py-4 md:py-0">
+                <div class="w-12 h-12 bg-yellow-600 rounded-full flex items-center justify-center shadow-lg shadow-yellow-500/50 border-4 border-gray-900">
+                    <i class="fas fa-globe-americas text-white"></i>
+                </div>
+            </div>
+            <div class="md:w-5/12 order-3 md:order-2 glass-card p-6 rounded-xl hover:border-yellow-500 transition border-l-4 border-yellow-500">
+                <div class="text-sm text-yellow-400 font-bold mb-2">Week 9-12</div>
+                <h3 class="text-2xl font-bold mb-3">板塊構造 & PyGMT 繪圖</h3>
+                <p class="text-gray-400 mb-4">探討全球板塊邊界，製作 PyGMT 教學網站，並研究古地磁與大陸漂移。</p>
+                <div class="flex flex-wrap gap-2 mb-4">
+                    <span class="px-2 py-1 bg-gray-700 rounded text-xs">PyGMT</span>
+                    <span class="px-2 py-1 bg-gray-700 rounded text-xs">Tectonics</span>
+                </div>
+                <a href="week_detail.html#week9" class="text-yellow-400 hover:text-white font-semibold">查看 PyGMT 作品 &rarr;</a>
+            </div>
+        </div>
+        
+        <div class="flex flex-col md:flex-row justify-between items-center mb-20 w-full relative z-10" data-aos="fade-right">
+             <div class="md:w-5/12 order-1 md:order-1 glass-card p-6 rounded-xl hover:border-red-500 transition border-l-4 border-red-500">
+                 <div class="text-sm text-red-400 font-bold mb-2">Week 13-16</div>
+                 <h3 class="text-2xl font-bold mb-3">地熱、AI 地震學 & 專題</h3>
+                 <p class="text-gray-400 mb-4">整合 Gemini API 與 Obspy 建立地震波分析平台，聆聽專家演講並進行期末專題發表。</p>
+                 <div class="flex flex-wrap gap-2 mb-4">
+                     <span class="px-2 py-1 bg-gray-700 rounded text-xs">AI</span>
+                     <span class="px-2 py-1 bg-gray-700 rounded text-xs">Seismology</span>
+                     <span class="px-2 py-1 bg-gray-700 rounded text-xs">Final Project</span>
+                 </div>
+                 <a href="week_detail.html#week13" class="text-red-400 hover:text-white font-semibold">查看 AI 專案 &rarr;</a>
+             </div>
+             <div class="md:w-2/12 order-2 flex justify-center py-4 md:py-0">
+                 <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center shadow-lg shadow-red-500/50 border-4 border-gray-900">
+                     <i class="fas fa-brain text-white"></i>
+                 </div>
+             </div>
+             <div class="md:w-5/12 order-3 md:order-3"></div>
+         </div>
+
+    </section>
+
+    <footer class="text-center py-8 text-gray-500 border-t border-gray-800">
+        <p>Copyright © 2025 地球科學系 U11310015 曾柏凱. All Rights Reserved.</p>
+    </footer>
 
     <script>
-        const weeks = [
-            { week: 1, date: "9/10", title: "課程介紹 & Python 環境", type: "基礎", desc: "Hugging Face, Github, Colab 環境建置", link: "https://huggingface.co/spaces/tspokai/homework1" },
-            { week: 2, date: "9/17", title: "深度探勘 & PyGMT", type: "技能", desc: "學習 PyGMT, Obspy, Streamlit", link: "https://tspokai.blogspot.com/2025/09/blog-post.html" },
-            { week: 3, date: "9/24", title: "校園野外震測實驗", type: "實驗", desc: "氣壓探勘、折射震測、臨界折射波分析", link: "details.html#week3" }, // 連接至子網頁
-            { week: 4, date: "10/1", title: "甘禮有博士專題演講", type: "講座", desc: "地震層析成像：正演與逆推問題", link: "details.html#week4" },
-            { week: 5, date: "10/8", title: "深度探勘互動方案", type: "專案", desc: "Hugging Face 臉部空間互動製作", link: "#" },
-            { week: 6, date: "10/15", title: "重力探勘 & Colab", type: "技能", desc: "重力異常修正與計算", link: "https://huggingface.co/spaces/tspokai/HW8" },
-            { week: 7, date: "10/22", title: "Gemini API & Dify", type: "AI", desc: "AI 應用於地球物理資料處理", link: "https://github.com/tsengpokai/Homework7_U11310015" },
-            { week: 8, date: "10/29", title: "期中考", type: "考試", desc: "檢驗前半學期學習成果", link: "#" },
-            { week: 9, date: "11/05", title: "板塊構造與地震 (I)", type: "知識", desc: "南美洲板塊邊界分析", link: "details.html#week9" }, // 連接至子網頁
-            { week: 10, date: "11/12", title: "板塊構造與地震 (II)", type: "技能", desc: "PyGMT 繪圖實作", link: "https://tsengpokai.github.io/intro-learnPYGMT/" },
-            { week: 11, date: "11/19", title: "板塊構造與地磁 (I)", type: "知識", desc: "Obspy 應用", link: "#" },
-            { week: 12, date: "11/26", title: "板塊構造與地磁 (II)", type: "技能", desc: "進階 Obspy 數據處理", link: "#" },
-            { week: 13, date: "12/3", title: "地熱與 AI 應用", type: "AI", desc: "Gemini API 與 Dify 綜合應用", link: "#" },
-            { week: 14, date: "12/10", title: "黃有志博士演講", type: "講座", desc: "阿蘇火山與熊本地震經驗談", link: "#" },
-            { week: 15, date: "12/17", title: "廖勿渝博士演講", type: "講座", desc: "AI 遇上地震學：深度學習監測", link: "#" },
-            { week: 16, date: "12/24", title: "期末專題發表", type: "發表", desc: "學期成果展示", link: "#" },
-            { week: 17, date: "12/31", title: "參訪中油大樓", type: "參訪", desc: "實地考察", link: "#" },
-            { week: 18, date: "1/7", title: "參訪地質調查所", type: "參訪", desc: "公部門地質應用", link: "#" }
-        ];
-
-        const container = document.getElementById('timeline-container');
-
-        weeks.forEach((item, index) => {
-            const isLeft = index % 2 === 0;
-            const alignClass = isLeft ? 'md:flex-row' : 'md:flex-row-reverse';
-            const textClass = isLeft ? 'md:text-right' : 'md:text-left';
-            
-            const html = `
-                <div class="flex flex-col ${alignClass} items-center mb-12 relative z-10 w-full">
-                    <div class="w-full md:w-5/12 ${textClass} px-4" data-aos="${isLeft ? 'fade-right' : 'fade-left'}">
-                        <div class="glass-card p-6 rounded-xl shadow-lg transition duration-300 card-hover cursor-pointer" onclick="window.location.href='${item.link}'">
-                            <span class="text-xs font-bold tracking-widest text-cyan-400 uppercase mb-2 block">${item.date} - Week ${item.week}</span>
-                            <h3 class="text-2xl font-bold mb-2 text-white">${item.title}</h3>
-                            <span class="inline-block px-2 py-1 text-xs rounded bg-purple-600 text-white mb-2">${item.type}</span>
-                            <p class="text-gray-300">${item.desc}</p>
-                        </div>
-                    </div>
-                    <div class="w-8 h-8 bg-cyan-500 rounded-full border-4 border-slate-900 z-20 shadow-[0_0_15px_#06b6d4] hidden md:block"></div>
-                    <div class="w-full md:w-5/12 px-4"></div>
-                </div>
-            `;
-            container.innerHTML += html;
-        });
-
         AOS.init({ duration: 1000, once: true });
+
+        // 背景動畫 (簡單的星空/粒子效果)
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const particles = [];
+        for(let i=0; i<100; i++) {
+            particles.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                r: Math.random() * 2,
+                d: Math.random() * 0.5
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'white';
+            particles.forEach(p => {
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fill();
+                p.y += p.d;
+                if(p.y > canvas.height) p.y = 0;
+            });
+            requestAnimationFrame(animate);
+        }
+        animate();
     </script>
 </body>
 </html>
