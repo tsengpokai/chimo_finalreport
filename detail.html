@@ -3,14 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>詳細內容</title>
+    <title>詳細內容 | Geophysics Exploration</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
     <style>
-        /* 新增微震遊戲樣式 */
-        #micro-canvas { width: 100%; height: 250px; background: #000; border: 1px solid #333; margin-top: 10px; border-radius: 4px; }
-        .monitor-panel { display: flex; justify-content: space-between; margin-top: 10px; font-family: monospace; color: #0f0; }
+        /* detail.html 專屬的額外樣式，確保遊戲顯示正確 */
+        #micro-canvas { 
+            width: 100%; 
+            height: 250px; 
+            background: #000; 
+            border: 1px solid #333; 
+            margin-top: 10px; 
+            border-radius: 4px; 
+        }
+        .monitor-panel { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-top: 10px; 
+            font-family: 'Courier New', monospace; 
+            background: #000;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+        .game-box {
+            background: rgba(16, 28, 45, 0.9);
+            border: 2px solid var(--accent-cyan);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.05);
+        }
+        .mag-legend { display: flex; justify-content: center; gap: 20px; margin-top: 10px; font-size: 0.8rem; color: #ccc;}
+        .legend-box { width: 15px; height: 15px; display: inline-block; vertical-align: middle; margin-right: 5px; border: 1px solid #555; }
     </style>
 </head>
 <body>
@@ -18,157 +45,247 @@
 
     <div class="detail-container">
         <br>
-        <a href="index.html" style="color:var(--accent-cyan); text-decoration:none; font-size:1.1rem; font-weight:bold;">
-            <i class="fas fa-arrow-left"></i> 返回時間軸
+        <a href="index.html" class="back-btn" style="display:inline-flex; align-items:center; color:var(--accent-cyan); text-decoration:none; font-size:1.1rem; font-weight:bold; margin-bottom: 20px;">
+            <i class="fas fa-arrow-left" style="margin-right: 8px;"></i> 返回時間軸
         </a>
         
-        <div id="content-wrapper" style="background: rgba(13, 22, 35, 0.9); border: 1px solid var(--accent-cyan); padding: 40px; border-radius: 16px; margin-top: 20px;">
+        <div id="content-wrapper" class="content-block" style="min-height: 500px;">
+            <div style="text-align:center; padding: 50px; color: #aaa;">
+                <i class="fas fa-circle-notch fa-spin fa-2x"></i><br>Loading content...
             </div>
+        </div>
     </div>
 
     <script src="data.js"></script>
     <script src="script.js"></script>
+    
     <script>
-        // Detail Page Logic
-        const params = new URLSearchParams(window.location.search);
-        const id = params.get('id');
-        const data = courseData[id];
-        const wrapper = document.getElementById('content-wrapper');
+        // --- 詳細頁面核心邏輯 ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            const data = (typeof courseData !== 'undefined') ? courseData[id] : null;
+            const wrapper = document.getElementById('content-wrapper');
 
-        if(data) {
-            let html = `
-                <div style="border-bottom: 1px solid #333; padding-bottom: 20px; margin-bottom: 30px;">
-                    <div style="color: var(--accent-cyan); font-family: 'Orbitron'; margin-bottom: 10px;">${data.date}</div>
-                    <h1 style="font-size: 2.5rem; margin-bottom: 15px; color:white;">${data.title}</h1>
-                    <div>${data.tags.map(t => `<span style="background:rgba(0,242,255,0.1); color:var(--accent-cyan); padding:4px 8px; margin-right:5px; border-radius:4px; font-size:0.8rem;">#${t}</span>`).join('')}</div>
-                </div>
-            `;
+            if (data) {
+                // 1. 渲染標頭 (Header)
+                let html = `
+                    <div style="border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; margin-bottom: 30px;">
+                        <div style="color: var(--accent-cyan); font-family: 'Orbitron', sans-serif; margin-bottom: 10px; letter-spacing: 1px;">${data.date}</div>
+                        <h1 style="font-size: 2.5rem; margin-bottom: 15px; color:white; line-height: 1.2;">${data.title}</h1>
+                        <div>
+                            ${data.tags.map(t => `<span style="background:rgba(0,242,255,0.1); color:var(--accent-cyan); padding:4px 10px; margin-right:8px; border-radius:20px; font-size:0.85rem; border:1px solid rgba(0,242,255,0.2);">#${t}</span>`).join('')}
+                        </div>
+                    </div>
+                `;
 
-            data.content.forEach(item => {
-                if(item.type === 'text') {
-                    html += `<div style="margin-bottom:25px;"><h3 style="color:var(--accent-blue); margin-bottom:10px;">${item.heading || ''}</h3><p style="color:#ddd; line-height:1.8;">${item.body}</p></div>`;
-                } else if (item.type === 'image') {
-                     html += `
-                        <div style="text-align:center; margin: 20px 0; border: 1px dashed #555; padding: 20px;">
-                            ${item.src.includes('http') || item.src.includes('.jpg') ? 
-                                `<img src="${item.src}" alt="${item.caption}" onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
-                                 <div style="display:none; color:orange;">[圖片] 請將 ${item.src} 放入資料夾</div>` 
-                                : ``
-                            }
-                            <p style="color:#aaa; font-size:0.9rem; margin-top:5px;">${item.caption}</p>
-                        </div>`;
-                } else if (item.type === 'math') {
-                    html += `<div style="background:rgba(0,0,0,0.3); padding:15px; border-left:3px solid var(--accent-cyan); margin:15px 0;"><strong>${item.heading}</strong><div style="margin-top:10px;">${item.body}</div></div>`;
-                } else if (item.type === 'iframe') {
-                    html += `<div style="margin:30px 0;"><iframe src="${item.src}" width="100%" height="500" style="border:none; border-radius:8px; background:#000;"></iframe><p style="text-align:center; color:#aaa; margin-top:5px;">${item.caption}</p></div>`;
-                } else if (item.type === 'link_group') {
-                    html += `<div style="margin-top:20px;">${item.links.map(l=>`<a href="${l.url}" target="_blank" style="background:var(--accent-blue); color:white; padding:10px 20px; text-decoration:none; border-radius:5px; margin-right:10px;">${l.text}</a>`).join('')}</div>`;
-                }
-                
-                // --- Game 1: 磁條帶 (保留) ---
-                else if (item.type === 'game_magnetic') {
-                    html += `
-                        <div class="game-box">
-                            <h2 style="color:var(--accent-cyan); text-align:center;"><i class="fas fa-magnet"></i> ${item.heading}</h2>
-                            <p style="color:#ccc; text-align:center; margin-bottom:15px;">${item.caption}</p>
-                            <label style="color:#aaa;">時間軸 (Ma): <span id="mag-time-val">0</span></label>
-                            <input type="range" id="mag-slider" min="0" max="100" value="0">
-                            <canvas id="mag-canvas"></canvas>
-                        </div>`;
-                }
-                // --- Game 2: 熱流模擬器 (還原上一版: 鑽井視覺化) ---
-                else if (item.type === 'game_heat') {
-                    html += `
-                        <div class="game-box">
-                            <h2 style="color:var(--accent-cyan); text-align:center;"><i class="fas fa-fire"></i> ${item.heading}</h2>
-                            <p style="color:#ccc; text-align:center; margin-bottom:20px;">${item.caption}</p>
-                            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:40px;">
-                                <div>
-                                    <div class="slider-group">
-                                        <label style="color:#fff;">導熱係數 k: <span id="val-k">2.5</span></label>
-                                        <input type="range" id="in-k" min="1.0" max="5.0" step="0.1" value="2.5">
-                                    </div>
-                                    <div class="slider-group">
-                                        <label style="color:#fff;">地溫梯度: <span id="val-grad">30</span></label>
-                                        <input type="range" id="in-grad" min="10" max="80" step="1" value="30">
-                                    </div>
-                                    <div class="slider-group">
-                                        <label style="color:#fff;">鑽井深度 (km): <span id="val-depth">3.0</span></label>
-                                        <input type="range" id="in-depth" min="1.0" max="10.0" step="0.5" value="3.0">
+                // 2. 渲染內容 (Content Loop)
+                data.content.forEach(item => {
+                    // --- 文字區塊 ---
+                    if (item.type === 'text') {
+                        html += `
+                            <div style="margin-bottom: 30px;">
+                                ${item.heading ? `<h3 style="color:var(--accent-blue); margin-bottom:12px; font-size:1.4rem; border-left:4px solid var(--accent-blue); padding-left:10px;">${item.heading}</h3>` : ''}
+                                <p style="color:#cbd5e1; line-height:1.8; font-size:1.05rem;">${item.body}</p>
+                            </div>`;
+                    } 
+                    // --- 圖片區塊 (修正版) ---
+                    else if (item.type === 'image') {
+                        html += `
+                            <div style="text-align:center; margin: 30px 0;">
+                                <div style="border: 1px solid rgba(255,255,255,0.1); padding: 10px; display: inline-block; background: rgba(0,0,0,0.2); border-radius: 8px;">
+                                    <img src="${item.src}" alt="${item.caption}" 
+                                         style="max-width: 100%; max-height: 600px; display: block; border-radius: 4px;"
+                                         onerror="this.style.display='none'; this.nextElementSibling.style.display='block'">
+                                    
+                                    <div style="display:none; color: #f59e0b; padding: 20px; text-align: center; width: 300px;">
+                                        <i class="fas fa-exclamation-triangle fa-2x"></i><br>
+                                        <span style="font-weight:bold; font-size:1.1rem; display:block; margin-top:10px;">圖片無法載入</span>
+                                        <span style="font-size: 0.9rem; color: #aaa; display:block; margin-top:5px; word-break: break-all;">路徑: ${item.src}</span>
+                                        <span style="font-size: 0.8rem; color: #666; display:block; margin-top:5px;">(請確認資料夾名稱是 img 還是 images?)</span>
                                     </div>
                                 </div>
-                                <div style="text-align:center;">
-                                    <div style="color:#aaa;">井底溫度</div>
-                                    <div style="font-size:3rem; color:var(--accent-cyan); font-weight:bold;"><span id="res-temp">110</span>°C</div>
-                                    <div class="visualizer" id="vis-bg" style="height:150px; background:#333; margin-top:10px; position:relative; overflow:hidden; border:1px solid #555;">
-                                        <div id="vis-drill" style="position:absolute; left:50%; top:0; width:4px; height:30%; background:#fff; transition:0.2s;"></div>
-                                        <div style="position:absolute; bottom:5px; right:5px; color:#fff; font-size:0.8rem;" id="depth-text">3km</div>
+                                <p style="color:#94a3b8; font-size:0.9rem; margin-top:10px; font-style: italic;">${item.caption}</p>
+                            </div>`;
+                    } 
+                    // --- 數學公式 ---
+                    else if (item.type === 'math') {
+                        html += `
+                            <div class="math-box" style="background:rgba(0,0,0,0.3); padding:20px; border-left:3px solid var(--accent-cyan); margin:20px 0; overflow-x:auto;">
+                                ${item.heading ? `<div style="font-weight:bold; color:var(--accent-cyan); margin-bottom:10px;">${item.heading}</div>` : ''}
+                                <div style="font-size: 1.1rem;">${item.body}</div>
+                            </div>`;
+                    } 
+                    // --- Iframe (嵌入網頁) ---
+                    else if (item.type === 'iframe') {
+                        html += `
+                            <div style="margin: 40px 0;">
+                                <div style="background:#0f172a; padding:8px 15px; border-radius:8px 8px 0 0; border:1px solid #334155; display:flex; justify-content:space-between; align-items:center;">
+                                    <span style="font-size:0.8rem; color:#aaa;"><i class="fas fa-globe"></i> Interactive Preview</span>
+                                    <a href="${item.src}" target="_blank" style="color:var(--accent-cyan); font-size:0.8rem; text-decoration:none;"><i class="fas fa-external-link-alt"></i> Open Fullscreen</a>
+                                </div>
+                                <iframe src="${item.src}" width="100%" height="500" style="border:none; border-radius:0 0 8px 8px; background:#000;"></iframe>
+                                <p style="text-align:center; color:#64748b; margin-top:8px; font-size:0.9rem;">${item.caption}</p>
+                            </div>`;
+                    } 
+                    // --- 連結按鈕組 ---
+                    else if (item.type === 'link_group') {
+                        html += `
+                            <div style="margin-top:20px; display:flex; flex-wrap:wrap; gap:10px;">
+                                ${item.links.map(l => `<a href="${l.url}" target="_blank" style="background:var(--accent-blue); color:white; padding:10px 20px; text-decoration:none; border-radius:6px; font-weight:bold; transition:0.3s; display:inline-flex; align-items:center;"><i class="fas fa-link" style="margin-right:5px;"></i> ${l.text}</a>`).join('')}
+                            </div>`;
+                    }
+
+                    // ==========================================
+                    // ============ 遊戲區塊邏輯 ================
+                    // ==========================================
+                    
+                    // --- Game 1: 磁條帶 ---
+                    else if (item.type === 'game_magnetic') {
+                        html += `
+                            <div class="game-box">
+                                <h2 style="color:var(--accent-cyan); text-align:center; margin-bottom:10px;"><i class="fas fa-magnet"></i> ${item.heading}</h2>
+                                <p style="color:#cbd5e1; text-align:center; margin-bottom:20px;">${item.caption}</p>
+                                <label style="color:#aaa; display:block; margin-bottom:5px;">時間軸 (百萬年): <span id="mag-time-val" style="color:#fff;">0</span> Ma</label>
+                                <input type="range" id="mag-slider" min="0" max="100" value="0" style="width:100%; accent-color:var(--accent-cyan);">
+                                <canvas id="mag-canvas" style="width:100%; height:150px; background:#000; border:1px solid #444; margin-top:15px;"></canvas>
+                                <div class="mag-legend">
+                                    <div><span class="legend-box" style="background:#fff;"></span> 正向極 (Normal)</div>
+                                    <div><span class="legend-box" style="background:#333;"></span> 反向極 (Reverse)</div>
+                                </div>
+                            </div>`;
+                    }
+                    // --- Game 2: 地殼熱流 (視覺化版) ---
+                    else if (item.type === 'game_heat') {
+                        html += `
+                            <div class="game-box">
+                                <h2 style="color:var(--accent-cyan); text-align:center; margin-bottom:10px;"><i class="fas fa-fire"></i> ${item.heading}</h2>
+                                <p style="color:#cbd5e1; text-align:center; margin-bottom:30px;">${item.caption}</p>
+                                
+                                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:30px;">
+                                    <div>
+                                        <div style="margin-bottom:20px;">
+                                            <label style="color:#fff; display:block; margin-bottom:5px;">導熱係數 k: <span id="val-k" style="color:var(--accent-cyan);">2.5</span></label>
+                                            <input type="range" id="in-k" min="1.0" max="5.0" step="0.1" value="2.5" style="width:100%;">
+                                        </div>
+                                        <div style="margin-bottom:20px;">
+                                            <label style="color:#fff; display:block; margin-bottom:5px;">地溫梯度: <span id="val-grad" style="color:var(--accent-cyan);">30</span> °C/km</label>
+                                            <input type="range" id="in-grad" min="10" max="80" step="1" value="30" style="width:100%;">
+                                        </div>
+                                        <div style="margin-bottom:20px;">
+                                            <label style="color:#fff; display:block; margin-bottom:5px;">鑽井深度: <span id="val-depth" style="color:var(--accent-cyan);">3.0</span> km</label>
+                                            <input type="range" id="in-depth" min="1.0" max="10.0" step="0.5" value="3.0" style="width:100%;">
+                                        </div>
+                                    </div>
+                                    <div style="text-align:center;">
+                                        <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:8px;">
+                                            <div style="color:#aaa; font-size:0.9rem;">預測井底溫度</div>
+                                            <div style="font-size:3rem; color:var(--accent-cyan); font-weight:bold; line-height:1;"><span id="res-temp">110</span>°C</div>
+                                        </div>
+                                        <div id="vis-bg" style="height:160px; background:#333; margin-top:15px; position:relative; overflow:hidden; border:1px solid #555; border-radius:4px;">
+                                            <div id="vis-drill" style="position:absolute; left:50%; top:0; transform:translateX(-50%); width:6px; height:30%; background:#fff; transition:0.2s; box-shadow: 0 0 10px white;"></div>
+                                            <div style="position:absolute; bottom:5px; right:5px; color:#fff; font-size:0.8rem; background:rgba(0,0,0,0.5); padding:2px 5px; border-radius:3px;" id="depth-text">3km</div>
+                                            <div style="position:absolute; bottom:5px; left:5px; color:#aaa; font-size:0.8rem;">Crust</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>`;
-                }
-                // --- Game 3: 微震監測 (新增) ---
-                else if (item.type === 'game_microseismic') {
-                    html += `
-                        <div class="game-box">
-                            <h2 style="color:var(--accent-cyan); text-align:center;"><i class="fas fa-wave-square"></i> ${item.heading}</h2>
-                            <p style="color:#ccc; text-align:center;">${item.caption}</p>
-                            <label style="color:#aaa;">注水壓力 (Pressure): <span id="pressure-val">0</span> MPa</label>
-                            <input type="range" id="pressure-input" min="0" max="100" value="0" step="1">
-                            
-                            <canvas id="micro-canvas"></canvas>
-                            <div class="monitor-panel">
-                                <div>Status: <span id="status-text">SAFE</span></div>
-                                <div>Events: <span id="event-count">0</span></div>
-                            </div>
-                        </div>`;
-                }
-            });
-            wrapper.innerHTML = html;
+                            </div>`;
+                    }
+                    // --- Game 3: 微震監測 (新增) ---
+                    else if (item.type === 'game_microseismic') {
+                        html += `
+                            <div class="game-box">
+                                <h2 style="color:var(--accent-cyan); text-align:center; margin-bottom:10px;"><i class="fas fa-wave-square"></i> ${item.heading}</h2>
+                                <p style="color:#cbd5e1; text-align:center; margin-bottom:20px;">${item.caption}</p>
+                                
+                                <div style="background:rgba(0,0,0,0.4); padding:15px; border-radius:8px; margin-bottom:15px;">
+                                    <label style="color:#aaa; display:block; margin-bottom:5px;">注水壓力 (Injection Pressure): <span id="pressure-val" style="color:white; font-weight:bold;">0</span> MPa</label>
+                                    <input type="range" id="pressure-input" min="0" max="100" value="0" step="1" style="width:100%; accent-color:var(--accent-red);">
+                                </div>
+                                
+                                <canvas id="micro-canvas"></canvas>
+                                
+                                <div class="monitor-panel">
+                                    <div>STATUS: <span id="status-text" style="color:#0f0;">SAFE</span></div>
+                                    <div>EVENTS: <span id="event-count" style="color:#fff;">0</span></div>
+                                </div>
+                            </div>`;
+                    }
+                });
 
-            // 初始化遊戲
-            setTimeout(() => {
-                if(document.getElementById('mag-slider')) initMagneticGame();
-                if(document.getElementById('in-k')) initHeatGame();
-                if(document.getElementById('pressure-input')) initMicroseismicGame();
-            }, 100);
-        }
+                wrapper.innerHTML = html;
 
-        // --- Game Logic ---
+                // 3. 重新渲染 MathJax (公式)
+                if (window.MathJax) {
+                    window.MathJax.typesetPromise();
+                }
+
+                // 4. 初始化遊戲邏輯 (延遲執行確保 DOM 存在)
+                setTimeout(() => {
+                    if(document.getElementById('mag-slider')) initMagneticGame();
+                    if(document.getElementById('in-k')) initHeatGame();
+                    if(document.getElementById('pressure-input')) initMicroseismicGame();
+                }, 200);
+
+            } else {
+                wrapper.innerHTML = "<h2 style='text-align:center; color:#ef4444; margin-top:50px;'>找不到該週次資料，請檢查網址參數。</h2>";
+            }
+        });
+
+
+        // ==========================================
+        // ============ 遊戲 JS 邏輯 ================
+        // ==========================================
+
+        // Game 1: 磁條帶
         function initMagneticGame() {
             const slider = document.getElementById('mag-slider');
             const canvas = document.getElementById('mag-canvas');
-            const ctx = canvas.getContext('2d');
             const timeVal = document.getElementById('mag-time-val');
-            // ... (同上一版邏輯)
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            
+            // 隨機生成磁極歷史
             const polarityHistory = [];
             for(let i=0; i<100; i++) polarityHistory.push(Math.random() > 0.5 ? 1 : 0);
+
             function draw() {
                 const w = canvas.width = canvas.offsetWidth;
                 const h = canvas.height = 150;
                 const time = parseInt(slider.value);
                 timeVal.innerText = time;
+                
                 const centerX = w / 2;
-                const spreadRate = 3;
+                const spreadRate = w / 220; // 動態調整寬度
+
                 ctx.clearRect(0, 0, w, h);
-                ctx.fillStyle = 'red'; ctx.fillRect(centerX - 1, 0, 2, h);
+                
+                // 畫洋脊中心
+                ctx.fillStyle = '#ff3333';
+                ctx.fillRect(centerX - 1, 0, 2, h);
+
                 for(let t=0; t<time; t++) {
-                    const color = polarityHistory[t] === 1 ? '#333' : '#fff';
+                    const color = polarityHistory[t] === 1 ? '#222' : '#eee';
                     const xOffset = (time - t) * spreadRate;
+                    
                     ctx.fillStyle = color;
-                    ctx.fillRect(centerX - xOffset, 0, spreadRate, h);
-                    ctx.fillRect(centerX + xOffset - spreadRate, 0, spreadRate, h);
+                    ctx.fillRect(centerX - xOffset, 0, spreadRate+1, h); // +1 防止縫隙
+                    ctx.fillRect(centerX + xOffset - spreadRate, 0, spreadRate+1, h);
                 }
             }
             slider.addEventListener('input', draw);
+            // 視窗改變大小時重繪
+            window.addEventListener('resize', draw);
             draw();
         }
 
+        // Game 2: 熱流
         function initHeatGame() {
             const inK = document.getElementById('in-k');
             const inGrad = document.getElementById('in-grad');
             const inDepth = document.getElementById('in-depth');
+            if(!inK) return;
+
             function update() {
                 const k = parseFloat(inK.value);
                 const g = parseFloat(inGrad.value);
@@ -185,32 +302,38 @@
                 // 視覺更新
                 const drillPercent = (d / 10) * 100;
                 document.getElementById('vis-drill').style.height = drillPercent + '%';
+                
+                // 顏色計算 (20度黑 -> 400度紅)
                 const intensity = Math.min((temp - 20) / 400, 1);
                 const r = Math.floor(intensity * 255);
-                document.getElementById('vis-bg').style.background = `linear-gradient(to bottom, #222, rgb(${r}, 0, 0))`;
+                const b = Math.floor((1-intensity) * 50);
+                document.getElementById('vis-bg').style.background = `linear-gradient(to bottom, #111, rgb(${r}, 0, ${b}))`;
             }
+
             inK.addEventListener('input', update);
             inGrad.addEventListener('input', update);
             inDepth.addEventListener('input', update);
             update();
         }
 
+        // Game 3: 微震監測
         function initMicroseismicGame() {
             const pInput = document.getElementById('pressure-input');
             const canvas = document.getElementById('micro-canvas');
+            if(!canvas) return;
             const ctx = canvas.getContext('2d');
+            
             let pressure = 0;
-            let events = []; // {x, y, life}
+            let events = []; // {x, y, life, maxLife}
 
             pInput.addEventListener('input', (e) => {
                 pressure = parseInt(e.target.value);
                 document.getElementById('pressure-val').innerText = pressure;
                 
-                // 狀態更新
                 const status = document.getElementById('status-text');
                 if(pressure < 40) { status.innerText = "SAFE"; status.style.color = "#0f0"; }
-                else if(pressure < 80) { status.innerText = "WARNING"; status.style.color = "yellow"; }
-                else { status.innerText = "DANGER: FRACTURE"; status.style.color = "red"; }
+                else if(pressure < 80) { status.innerText = "WARNING"; status.style.color = "#fbbf24"; }
+                else { status.innerText = "CRITICAL: FRACTURE DETECTED"; status.style.color = "#ef4444"; }
             });
 
             function loop() {
@@ -218,27 +341,47 @@
                 const h = canvas.height = 250;
                 ctx.clearRect(0, 0, w, h);
 
-                // 畫井
-                ctx.strokeStyle = '#555'; ctx.lineWidth = 4;
-                ctx.beginPath(); ctx.moveTo(w/2, 0); ctx.lineTo(w/2, h*0.8); ctx.stroke();
+                // 畫井管
+                ctx.strokeStyle = '#666'; 
+                ctx.lineWidth = 4;
+                ctx.beginPath(); 
+                ctx.moveTo(w/2, 0); 
+                ctx.lineTo(w/2, h*0.8); 
+                ctx.stroke();
 
-                // 產生微震
-                if(Math.random() * 100 < pressure) {
-                    const spread = pressure * 1.5;
+                // 畫地層線
+                ctx.strokeStyle = '#222';
+                ctx.lineWidth = 1;
+                for(let i=0; i<h; i+=40) {
+                    ctx.beginPath(); ctx.moveTo(0, i); ctx.lineTo(w, i); ctx.stroke();
+                }
+
+                // 根據壓力隨機產生微震
+                // 壓力越大，產生機率越高，擴散範圍越廣
+                if(pressure > 10 && Math.random() * 100 < (pressure/2)) {
+                    const spreadX = pressure * 2.5; // 水平擴散
+                    const spreadY = pressure * 1.0; // 垂直擴散
                     events.push({
-                        x: w/2 + (Math.random()-0.5) * spread,
-                        y: h*0.8 + (Math.random()-0.5) * spread/2,
-                        life: 1.0
+                        x: w/2 + (Math.random()-0.5) * spreadX,
+                        y: h*0.8 + (Math.random()-0.5) * spreadY,
+                        life: 1.0,
+                        color: pressure > 80 ? '#ef4444' : (pressure > 40 ? '#fbbf24' : '#0f0')
                     });
                 }
 
-                // 繪製微震點
-                events.forEach((e, i) => {
-                    ctx.fillStyle = `rgba(${pressure*2.5}, ${255-pressure*2}, 0, ${e.life})`;
-                    ctx.beginPath(); ctx.arc(e.x, e.y, 3, 0, Math.PI*2); ctx.fill();
-                    e.life -= 0.02;
+                // 繪製與更新微震點
+                for(let i = events.length - 1; i >= 0; i--) {
+                    const e = events[i];
+                    ctx.globalAlpha = e.life;
+                    ctx.fillStyle = e.color;
+                    ctx.beginPath(); 
+                    ctx.arc(e.x, e.y, 3, 0, Math.PI*2); 
+                    ctx.fill();
+                    
+                    e.life -= 0.01; // 慢慢消失
                     if(e.life <= 0) events.splice(i, 1);
-                });
+                }
+                ctx.globalAlpha = 1.0;
                 
                 document.getElementById('event-count').innerText = events.length;
                 requestAnimationFrame(loop);
