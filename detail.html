@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>詳細內容 | 地球物理回顧</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <canvas id="bg-canvas"></canvas>
+
+    <nav class="fixed w-full z-50 glass-card px-6 py-4 flex justify-between items-center">
+        <a href="index.html" class="flex items-center text-blue-400 hover:text-white transition">
+            <i class="fas fa-arrow-left mr-2"></i> 返回時間軸
+        </a>
+        <div id="page-title-nav" class="text-lg font-bold text-gray-300">Loading...</div>
+    </nav>
+
+    <main class="container mx-auto px-4 py-24 max-w-5xl">
+        
+        <div id="loading" class="flex justify-center items-center h-64">
+            <div class="loader"></div>
+        </div>
+
+        <div id="content-area" class="hidden animate-fade-in-up">
+            <div class="mb-12 border-b border-gray-700 pb-8">
+                <div class="flex items-center gap-4 mb-4">
+                    <span id="detail-date" class="px-3 py-1 bg-gray-800 rounded-full text-sm text-gray-400 font-mono"></span>
+                    <div id="detail-tags" class="flex gap-2"></div>
+                </div>
+                <h1 id="detail-title" class="text-4xl md:text-5xl font-bold mb-6 text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400"></h1>
+                <p id="detail-desc" class="text-xl text-gray-300 leading-relaxed max-w-3xl"></p>
+            </div>
+
+            <div id="detail-body" class="space-y-12">
+                </div>
+
+            <div class="mt-16 pt-8 border-t border-gray-800 flex justify-between">
+                <a href="index.html" class="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg transition text-gray-300">
+                    <i class="fas fa-home mr-2"></i>回首頁
+                </a>
+                </div>
+        </div>
+    </main>
+
+    <script src="data.js"></script>
+    <script>
+        // Detail Page Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const weekId = params.get('id');
+
+            if (!weekId || !courseData[weekId]) {
+                window.location.href = 'index.html'; // Redirect if invalid
+                return;
+            }
+
+            const data = courseData[weekId];
+
+            // Render Header
+            document.getElementById('page-title-nav').innerText = data.title;
+            document.getElementById('detail-title').innerText = data.title;
+            document.getElementById('detail-date').innerText = data.date;
+            document.getElementById('detail-desc').innerText = data.description;
+
+            const tagsContainer = document.getElementById('detail-tags');
+            data.tags.forEach(tag => {
+                const span = document.createElement('span');
+                span.className = 'tag';
+                span.innerText = `#${tag}`;
+                tagsContainer.appendChild(span);
+            });
+
+            // Render Body Content
+            const bodyContainer = document.getElementById('detail-body');
+            
+            data.content.forEach(item => {
+                const section = document.createElement('div');
+                section.className = 'glass-card p-8 rounded-xl';
+
+                let innerHTML = '';
+                if(item.heading) innerHTML += `<h3 class="text-2xl font-bold mb-4 text-blue-300 border-l-4 border-blue-500 pl-3">${item.heading}</h3>`;
+
+                if(item.type === 'text') {
+                    innerHTML += `<div class="text-gray-300 leading-relaxed space-y-2">${item.body}</div>`;
+                } else if (item.type === 'iframe') {
+                    innerHTML += `
+                        <div class="w-full h-[500px] bg-black rounded-lg overflow-hidden border border-gray-700 relative">
+                            <div class="absolute top-0 left-0 w-full bg-gray-800 px-4 py-1 text-xs text-gray-400 flex justify-between items-center">
+                                <span>Interactive Preview</span>
+                                <a href="${item.src}" target="_blank" class="hover:text-white"><i class="fas fa-external-link-alt"></i> Open New Tab</a>
+                            </div>
+                            <iframe src="${item.src}" class="w-full h-full pt-6" frameborder="0"></iframe>
+                        </div>
+                        ${item.caption ? `<p class="text-center text-sm text-gray-500 mt-2">${item.caption}</p>` : ''}
+                    `;
+                } else if (item.type === 'code') {
+                    innerHTML += `
+                        <div class="bg-gray-900 p-4 rounded-lg font-mono text-sm text-green-400 overflow-x-auto border border-gray-700 shadow-inner">
+                            <pre>${item.body}</pre>
+                        </div>
+                    `;
+                } else if (item.type === 'math') {
+                    innerHTML += `<div class="math-block text-lg">${item.body}</div>`;
+                } else if (item.type === 'image') {
+                    innerHTML += `
+                         <div class="flex flex-col items-center">
+                            <div class="w-full max-w-3xl bg-gray-800 rounded-lg flex items-center justify-center min-h-[300px] border border-gray-700 overflow-hidden">
+                                <img src="${item.src}" alt="${item.caption}" class="w-full h-auto object-cover" onerror="this.parentElement.innerHTML='<span class=\'text-gray-500\'>請將圖片放入並修改 src 路徑: ${item.src}</span>'">
+                            </div>
+                            ${item.caption ? `<p class="text-gray-400 mt-2 italic">${item.caption}</p>` : ''}
+                        </div>
+                    `;
+                } else if (item.type === 'link_group') {
+                    innerHTML += `<div class="flex flex-wrap gap-4">`;
+                    item.links.forEach(link => {
+                        innerHTML += `<a href="${link.url}" target="_blank" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white transition shadow-lg"><i class="fas fa-link mr-2"></i>${link.text}</a>`;
+                    });
+                    innerHTML += `</div>`;
+                }
+
+                section.innerHTML = innerHTML;
+                bodyContainer.appendChild(section);
+            });
+
+            // Refresh MathJax
+            if(window.MathJax) {
+                window.MathJax.typesetPromise();
+            }
+
+            // Show Content
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('content-area').classList.remove('hidden');
+
+            // Start Canvas Animation
+            initCanvas(); 
+        });
+
+        // Simple Canvas Animation reuse
+        function initCanvas() {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            
+            const resize = () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            };
+            window.addEventListener('resize', resize);
+            resize();
+
+            const particles = Array.from({length: 50}, () => ({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                vx: (Math.random() - 0.5) * 0.5,
+                vy: (Math.random() - 0.5) * 0.5,
+                size: Math.random() * 2
+            }));
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+                
+                particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    if(p.x < 0) p.x = width;
+                    if(p.x > width) p.x = 0;
+                    if(p.y < 0) p.y = height;
+                    if(p.y > height) p.y = 0;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+    </script>
+</body>
+</html>
