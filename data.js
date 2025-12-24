@@ -97,7 +97,7 @@ const courseData = {
             // 如果要用本地圖片，請改用下面這行：
              { type: "image", src: "images/061.png", caption: "AI Agent 工作流架構圖" },
             // 如果要維持 Notion 連結：
-            { type: "image", src: "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fhw-2a9a2e8d13c680e2a0eced173b528cc4.png?table=block&id=2a9a2e8d-13c6-80e2-a0ec-ed173b528cc4", caption: "AI Agent 工作流架構圖" },
+            //{ type: "image", src: "https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2Fhw-2a9a2e8d13c680e2a0eced173b528cc4.png?table=block&id=2a9a2e8d-13c6-80e2-a0ec-ed173b528cc4", caption: "AI Agent 工作流架構圖" },
             { type: "link_group", links: [{text: "GitHub Repo", url: "https://github.com/tsengpokai/Homework7_U11310015"}, {text: "Notion Page", url: "https://www.notion.so/hw-2a9a2e8d13c680e2a0eced173b528cc4"}] }
         ]
     },
